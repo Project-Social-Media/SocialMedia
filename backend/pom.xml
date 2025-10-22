@@ -32,6 +32,12 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+			<!-- <scope>test</scope> rất quan trọng, nó báo rằng thư viện này CHỈ dùng khi chạy test -->
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
