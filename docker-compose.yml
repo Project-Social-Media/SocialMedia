@@ -1,0 +1,29 @@
+# Phiên bản của Docker Compose
+version: '3.9'
+
+# Định nghĩa các "dịch vụ" (containers)
+services:
+
+  # 1. Dịch vụ Database (Dùng SQL Server)
+  database:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql_db
+    ports:
+      # Ánh xạ cổng 1433 của máy thật vào cổng 1433 của container
+      # Giúp bạn kết nối tới DB từ máy thật qua 'localhost:1433'
+      - "1433:1433"
+    environment:
+      # Đồng ý với điều khoản của Microsoft
+      ACCEPT_EULA: "Y"
+      # Đặt mật khẩu cho tài khoản 'sa' (Super Admin)
+      SA_PASSWORD: "Your_Strong_Password123" # <-- Đổi mật khẩu này
+      MSSQL_PID: "Express" # Dùng bản Express miễn phí
+    volumes:
+      # "db_data" là một vùng lưu trữ để giữ dữ liệu
+      # ngay cả khi bạn xóa container.
+      - db_data:/var/opt/mssql
+
+# Định nghĩa "volume" để lưu trữ dữ liệu database
+volumes:
+  db_data:
+    driver: local
