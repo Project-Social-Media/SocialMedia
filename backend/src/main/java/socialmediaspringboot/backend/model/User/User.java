@@ -1,8 +1,10 @@
-package socialmediaspringboot.backend.model;
+package socialmediaspringboot.backend.model.User;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.joda.time.DateTime;
+import socialmediaspringboot.backend.model.Gender;
+import socialmediaspringboot.backend.model.Role;
 
 import java.util.Date;
 import java.util.HashSet;

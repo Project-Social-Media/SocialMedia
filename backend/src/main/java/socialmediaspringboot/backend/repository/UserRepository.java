@@ -3,7 +3,7 @@ package socialmediaspringboot.backend.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import socialmediaspringboot.backend.model.User;
+import socialmediaspringboot.backend.model.User.User;
 
 import java.util.List;
 import java.util.Optional;
