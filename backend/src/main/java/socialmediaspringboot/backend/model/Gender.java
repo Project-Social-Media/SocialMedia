@@ -18,7 +18,7 @@ public class Gender {
     private Integer GenderId;
 
     @Column(nullable = false,unique = true)
-    private String GenderName;
+    private String genderName;
 
     private String GenderDescription;
 }

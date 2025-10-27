@@ -6,5 +6,5 @@ import socialmediaspringboot.backend.model.Role;
 import java.util.Optional;
 
 public interface RoleRepository extends JpaRepository<Role, Integer> {
-    Optional<Role> findByName(String RoleName);
+    Optional<Role> findByRoleName(String roleName);
 }

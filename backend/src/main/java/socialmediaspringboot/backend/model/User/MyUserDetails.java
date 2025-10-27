@@ -3,9 +3,13 @@ package socialmediaspringboot.backend.model.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import socialmediaspringboot.backend.model.Role;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,9 +20,7 @@ public class MyUserDetails implements UserDetails {
     }
 
     @Override
-    public String getUsername(){return null;}
-
-    public String getEmail(){return user.getEmail();}
+    public String getUsername(){return user.getEmail();}  // để là getusername nhưng trả ra email
 
     @Override
     public String getPassword() {return user.getPassword();}
@@ -27,13 +29,13 @@ public class MyUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities(){
         //create & return a List<GrantedAuthority> from roles
 
-//        Set<GrantedAuthority> authorities = new HashSet<>();
-//
-//        for(Role role : user.getRoles()){
-//            authorities.add(new SimpleGrantedAuthority(("ROLE_" + role.getRole_name())));
-//        }
-//        return authorities;
-        return null;
+        Set<GrantedAuthority> authorities = new HashSet<>();
+
+        for(Role role : user.getRoles()){
+            authorities.add(new SimpleGrantedAuthority(("ROLE_" + role.getRoleName())));
+        }
+        return authorities;
+//        return null;
     }
 
     @Override

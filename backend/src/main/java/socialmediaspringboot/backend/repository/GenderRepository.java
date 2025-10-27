@@ -6,5 +6,5 @@ import socialmediaspringboot.backend.model.Gender;
 import java.util.Optional;
 
 public interface GenderRepository extends JpaRepository<Gender, Integer> {
-    Optional<Gender> findByName(String GenderName);
+    Optional<Gender> findByGenderName(String genderName);
 }
