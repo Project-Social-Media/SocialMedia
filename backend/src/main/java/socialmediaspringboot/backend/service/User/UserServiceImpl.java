@@ -1,6 +1,5 @@
 package socialmediaspringboot.backend.service.User;
 
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.dao.DataIntegrityViolationException;
