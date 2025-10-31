@@ -3,12 +3,11 @@ package socialmediaspringboot.backend.dto;
 import lombok.*;
 
 @Data
-@Getter
-@Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponse {
-    boolean isAuthenticated;
+@Builder
+@Getter
+@Setter
+public class LogoutDTO {
     String token;
 }
