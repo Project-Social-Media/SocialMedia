@@ -6,9 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
 import socialmediaspringboot.backend.model.Gender;
+import socialmediaspringboot.backend.model.Role;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,5 +24,5 @@ public class UserDTO {
     private Gender gender;
     private Date birth;
     private DateTime createdAt;
-    List<String> roles;
+    Set<Role> roles;
 }
