@@ -1,15 +1,19 @@
 package socialmediaspringboot.backend.service.Authentication;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import socialmediaspringboot.backend.dto.AuthenticationRequest;
 import socialmediaspringboot.backend.dto.AuthenticationResponse;
 import socialmediaspringboot.backend.dto.LogoutDTO;
 import socialmediaspringboot.backend.repository.UserRepository;
 
+@Service
+@RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService{
 
     @Autowired

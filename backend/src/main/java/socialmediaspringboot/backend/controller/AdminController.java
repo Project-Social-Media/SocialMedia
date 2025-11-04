@@ -13,6 +13,7 @@ public class AdminController {
     @GetMapping("/test")
     public ApiResponse<String> testAdminAccess(){
         return ApiResponse.<String>builder()
+                .code(1)
                 .message("Admin access successfully")
                 .result("Hello Admin")
                 .build();

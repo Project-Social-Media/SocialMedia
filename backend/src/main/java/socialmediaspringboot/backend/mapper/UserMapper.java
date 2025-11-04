@@ -12,11 +12,13 @@ import java.util.Optional;
 public interface UserMapper {
 
     @Mapping(target="roles", ignore = true)
+    @Mapping(target = "userId", ignore = true)
     User toUser(UserDTO request);
 
     @Mapping(target="roles", ignore = true)
     UserDTO toUserDTO (User user);
 
     @Mapping(target="roles", ignore = true)
+    @Mapping(target = "userId", ignore = true)
     void updateUser(@MappingTarget User user, UserDTO request);
 }

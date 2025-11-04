@@ -21,6 +21,8 @@ public class UserAuthController {
     private ApiResponse<AuthenticationResponse> userAuthenticate(@RequestBody AuthenticationRequest request){
         var authResult = authenticationService.loginWithRole(request, "USER");
         return ApiResponse.<AuthenticationResponse>builder()
+                .code(1)
+                .message("")
                 .result(authResult)
                 .build();
     }
