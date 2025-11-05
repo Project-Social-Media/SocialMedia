@@ -157,6 +157,9 @@ CREATE TABLE reaction (
     ) -- Đảm bảo reaction chỉ thuộc về Post hoặc Comment
 );
 
+SET QUOTED_IDENTIFIER ON;
+GO
+
 -- User chỉ có 1 reaction trên 1 post
 CREATE UNIQUE INDEX UQ_Reaction_Post
 ON reaction(authorId, postId)
@@ -215,6 +218,8 @@ CREATE TABLE conversationParticipant (
 
 
 -- ========= TẠO INDEXES ĐỂ TĂNG HIỆU NĂNG =========
+GO
+USE SocialNetworkDB;
 GO
 CREATE INDEX IX_User_Email ON users(email);
 CREATE INDEX IX_Post_AuthorId ON post(authorId);
