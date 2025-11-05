@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import socialmediaspringboot.backend.model.Gender;
 import socialmediaspringboot.backend.model.Role;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,31 +17,40 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userId", nullable = false)
     private Long userId;
 
+    @Column(name = "email") // <-- Thêm @Column cho rõ ràng
     private String email;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "firstname")
     private String firstname;
+
+    @Column(name = "lastname")
     private String lastname;
 
     @ManyToOne
-    @JoinColumn(name = "GenderId")
+    @JoinColumn(name = "genderId")
     private Gender gender;
 
+    @Column(name = "birthdate")
     private Date birth;
-    private DateTime createdAt;
 
+    @Column(name = "createdAt")
+    private LocalDateTime createdAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            name = "userRole",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId")
     )
     private Set<Role> roles = new HashSet<>();
 }

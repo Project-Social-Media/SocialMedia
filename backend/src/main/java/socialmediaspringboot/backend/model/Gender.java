@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Table(name = "Gender")
+@Table(name = "gender")
 @Setter
 @Getter
 @NoArgsConstructor
@@ -15,10 +15,10 @@ import lombok.*;
 @Builder
 public class Gender {
     @Id
-    private Integer GenderId;
+    private Integer genderId;
 
     @Column(nullable = false,unique = true)
     private String genderName;
 
-    private String GenderDescription;
+    private String genderDescription;
 }

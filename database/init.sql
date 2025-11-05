@@ -1,42 +1,59 @@
-CREATE TABLE Privacy (
-    PrivacyId INT PRIMARY KEY,
-    PrivacyName NVARCHAR(50) NOT NULL UNIQUE,
-    PrivacyDescription NVARCHAR(100)
+/* * NEW DATABASE */
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'SocialNetworkDB')
+BEGIN
+    CREATE DATABASE SocialNetworkDB;
+    PRINT 'Database SocialNetworkDB đã được tạo.';
+END
+ELSE
+BEGIN
+    PRINT 'Database SocialNetworkDB đã tồn tại.';
+END
+GO
+
+USE SocialNetworkDB;
+GO
+
+/* LOOKUP TABLES */
+
+CREATE TABLE privacy (
+    privacyId INT PRIMARY KEY,
+    privacyName NVARCHAR(50) NOT NULL UNIQUE,
+    privacyDescription NVARCHAR(100)
 );
 
-CREATE TABLE FriendRequestStatus (
-    StatusId INT PRIMARY KEY,
-    StatusName NVARCHAR(50) NOT NULL UNIQUE,
-    StatusDescription NVARCHAR(100)
+CREATE TABLE friendRequestStatus (
+    statusId INT PRIMARY KEY,
+    statusName NVARCHAR(50) NOT NULL UNIQUE,
+    statusDescription NVARCHAR(100)
 );
 
-CREATE TABLE ReactionType (
-    ReactionTypeId INT PRIMARY KEY,
-    TypeName NVARCHAR(50) NOT NULL UNIQUE,
-    IconUrl NVARCHAR(255)
+CREATE TABLE reactionType (
+    reactionTypeId INT PRIMARY KEY,
+    typeName NVARCHAR(50) NOT NULL UNIQUE,
+    iconUrl NVARCHAR(255)
 );
 
-CREATE TABLE MediaType (
-    MediaTypeId INT PRIMARY KEY,
-    TypeName NVARCHAR(50) NOT NULL UNIQUE,
-    TypeDescription NVARCHAR(100)
+CREATE TABLE mediaType (
+    mediaTypeId INT PRIMARY KEY,
+    typeName NVARCHAR(50) NOT NULL UNIQUE,
+    typeDescription NVARCHAR(100)
 );
 
-CREATE TABLE Gender (
-    GenderId INT PRIMARY KEY,
-    GenderName NVARCHAR(50) NOT NULL UNIQUE,
-    GenderDescription NVARCHAR(100)
+CREATE TABLE gender (
+    genderId INT PRIMARY KEY,
+    genderName NVARCHAR(50) NOT NULL UNIQUE,
+    genderDescription NVARCHAR(100)
 );
 
-CREATE TABLE Role (
-    RoleId INT PRIMARY KEY,
-    RoleName NVARCHAR(50) NOT NULL UNIQUE,
-    RoleDescription NVARCHAR(100)
+CREATE TABLE role (
+    roleId INT PRIMARY KEY,
+    roleName NVARCHAR(50) NOT NULL UNIQUE,
+    roleDescription NVARCHAR(100)
 );
 
 -- ========= BẢNG CHÍNH (CORE TABLES) =========
 
-CREATE TABLE Users (
+CREATE TABLE users (
     userId BIGINT IDENTITY(1,1) PRIMARY KEY,
     email NVARCHAR(255) NOT NULL UNIQUE,
     password NVARCHAR(255) NOT NULL, -- Mật khẩu phải được băm (hashed)
@@ -47,23 +64,23 @@ CREATE TABLE Users (
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE(),
     isOnline BIT NOT NULL DEFAULT 0,
 
-    CONSTRAINT FK_User_Gender FOREIGN KEY (genderId) REFERENCES Gender(genderId)
+    CONSTRAINT FK_User_Gender FOREIGN KEY (genderId) REFERENCES gender(genderId)
 );
 
-CREATE TABLE FriendRequest (
+CREATE TABLE friendRequest (
     friendRequestId BIGINT IDENTITY(1,1) PRIMARY KEY,
     senderId BIGINT NOT NULL,
     receiverId BIGINT NOT NULL,
     statusId INT NOT NULL,
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE(),
 
-    CONSTRAINT FK_FriendRequest_Sender FOREIGN KEY (senderId) REFERENCES Users(userId),
-    CONSTRAINT FK_FriendRequest_Receiver FOREIGN KEY (receiverId) REFERENCES Users(userId),
-    CONSTRAINT FK_FriendRequest_Status FOREIGN KEY (statusId) REFERENCES FriendRequestStatus(statusId),
+    CONSTRAINT FK_FriendRequest_Sender FOREIGN KEY (senderId) REFERENCES users(userId),
+    CONSTRAINT FK_FriendRequest_Receiver FOREIGN KEY (receiverId) REFERENCES users(userId),
+    CONSTRAINT FK_FriendRequest_Status FOREIGN KEY (statusId) REFERENCES friendRequestStatus(statusId),
     CONSTRAINT UQ_FriendRequest_Pair UNIQUE (senderId, receiverId) -- Ngăn chặn gửi nhiều request trùng lặp
 );
 
-CREATE TABLE Post (
+CREATE TABLE post (
     postId BIGINT IDENTITY(1,1) PRIMARY KEY,
     authorId BIGINT NOT NULL,
     content NVARCHAR(MAX),
@@ -73,18 +90,18 @@ CREATE TABLE Post (
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE(),
     updatedAt DATETIME2,
 
-    CONSTRAINT FK_Post_Author FOREIGN KEY (authorId) REFERENCES Users(userId) ON DELETE CASCADE,
-    CONSTRAINT FK_Post_OriginalPost FOREIGN KEY (originalpostId) REFERENCES Post(postId), -- Self-referencing
-    CONSTRAINT FK_Post_Privacy FOREIGN KEY (privacyId) REFERENCES Privacy(privacyId)
+    CONSTRAINT FK_Post_Author FOREIGN KEY (authorId) REFERENCES users(userId) ON DELETE CASCADE,
+    CONSTRAINT FK_Post_OriginalPost FOREIGN KEY (originalpostId) REFERENCES post(postId), -- Self-referencing
+    CONSTRAINT FK_Post_Privacy FOREIGN KEY (privacyId) REFERENCES privacy(privacyId)
 );
 
-CREATE TABLE Conversation (
+CREATE TABLE conversation (
     conversationId BIGINT IDENTITY(1,1) PRIMARY KEY,
     conversationname NVARCHAR(100), -- Cho group chat
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE()
 );
 
-CREATE TABLE Notification (
+CREATE TABLE notification (
     notificationId BIGINT IDENTITY(1,1) PRIMARY KEY,
     recipientId BIGINT NOT NULL,
     actorId BIGINT NOT NULL,
@@ -95,16 +112,16 @@ CREATE TABLE Notification (
     postId BIGINT NULL,
     commentId BIGINT NULL,
 
-    CONSTRAINT FK_Notification_Recipient FOREIGN KEY (recipientId) REFERENCES Users(userId) ON DELETE CASCADE,
-    CONSTRAINT FK_Notification_Actor FOREIGN KEY (actorId) REFERENCES Users(userId), -- No cascade on actor
-    CONSTRAINT FK_Notification_Post FOREIGN KEY (postId) REFERENCES Post(postId)
+    CONSTRAINT FK_Notification_Recipient FOREIGN KEY (recipientId) REFERENCES users(userId) ON DELETE CASCADE,
+    CONSTRAINT FK_Notification_Actor FOREIGN KEY (actorId) REFERENCES users(userId), -- No cascade on actor
+    CONSTRAINT FK_Notification_Post FOREIGN KEY (postId) REFERENCES post(postId)
     -- FK to Comment will be added after Comment table is created
 );
 
 
 -- ========= BẢNG PHỤ THUỘC & BẢNG TRUNG GIAN =========
 
-CREATE TABLE Comment (
+CREATE TABLE comment (
     commentId BIGINT IDENTITY(1,1) PRIMARY KEY,
     authorId BIGINT NOT NULL,
     postId BIGINT NOT NULL,
@@ -112,15 +129,15 @@ CREATE TABLE Comment (
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE(),
     updatedAt DATETIME2,
 
-    CONSTRAINT FK_Comment_Author FOREIGN KEY (authorId) REFERENCES Users(userId),
-    CONSTRAINT FK_Comment_Post FOREIGN KEY (postId) REFERENCES Post(postId) ON DELETE CASCADE
+    CONSTRAINT FK_Comment_Author FOREIGN KEY (authorId) REFERENCES users(userId),
+    CONSTRAINT FK_Comment_Post FOREIGN KEY (postId) REFERENCES post(postId) ON DELETE CASCADE
 );
 
 -- Thêm FK còn thiếu vào bảng Notification
-ALTER TABLE Notification
-ADD CONSTRAINT FK_Notification_Comment FOREIGN KEY (commentId) REFERENCES Comment(commentId);
+ALTER TABLE notification
+ADD CONSTRAINT FK_Notification_Comment FOREIGN KEY (commentId) REFERENCES comment(commentId);
 
-CREATE TABLE Reaction (
+CREATE TABLE reaction (
     reactionId BIGINT IDENTITY(1,1) PRIMARY KEY,
     authorId BIGINT NOT NULL,
     reactionTypeId INT NOT NULL,
@@ -129,10 +146,10 @@ CREATE TABLE Reaction (
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE(),
 
     -- Các khóa ngoại
-    CONSTRAINT FK_Reaction_Author FOREIGN KEY (authorId) REFERENCES Users(userId),
-    CONSTRAINT FK_Reaction_Type FOREIGN KEY (reactionTypeId) REFERENCES ReactionType(reactionTypeId),
-    CONSTRAINT FK_Reaction_Post FOREIGN KEY (postId) REFERENCES Post(postId) ON DELETE CASCADE,
-    CONSTRAINT FK_Reaction_Comment FOREIGN KEY (commentId) REFERENCES Comment(commentId), -- Sửa 'Comment(commentId)' thành tên cột PK của bảng Comment
+    CONSTRAINT FK_Reaction_Author FOREIGN KEY (authorId) REFERENCES users(userId),
+    CONSTRAINT FK_Reaction_Type FOREIGN KEY (reactionTypeId) REFERENCES reactionType(reactionTypeId),
+    CONSTRAINT FK_Reaction_Post FOREIGN KEY (postId) REFERENCES post(postId) ON DELETE CASCADE,
+    CONSTRAINT FK_Reaction_Comment FOREIGN KEY (commentId) REFERENCES comment(commentId), -- Sửa 'Comment(commentId)' thành tên cột PK của bảng Comment
 
     -- CHECK constraint này có thể giữ lại bên trong
     CONSTRAINT CHK_Reaction_Target CHECK (
@@ -142,17 +159,17 @@ CREATE TABLE Reaction (
 
 -- User chỉ có 1 reaction trên 1 post
 CREATE UNIQUE INDEX UQ_Reaction_Post
-ON Reaction(authorId, postId)
+ON reaction(authorId, postId)
 WHERE commentId IS NULL;
 
 
 -- User chỉ có 1 reaction trên 1 comment
 CREATE UNIQUE INDEX UQ_Reaction_Comment
-ON Reaction(authorId, commentId)
+ON reaction(authorId, commentId)
 WHERE postId IS NULL;
 
 
-CREATE TABLE Media (
+CREATE TABLE media (
     mediaId BIGINT IDENTITY(1,1) PRIMARY KEY,
     mediaUrl NVARCHAR(500) NOT NULL,
     mediatypeId INT NOT NULL,
@@ -161,73 +178,73 @@ CREATE TABLE Media (
     commentId BIGINT NULL,
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE(),
 
-    CONSTRAINT FK_Media_Type FOREIGN KEY (mediatypeId) REFERENCES MediaType(mediatypeId),
-    CONSTRAINT FK_Media_Post FOREIGN KEY (postId) REFERENCES Post(postId) ON DELETE CASCADE,
-    CONSTRAINT FK_Media_Comment FOREIGN KEY (commentId) REFERENCES Comment(commentId),
+    CONSTRAINT FK_Media_Type FOREIGN KEY (mediatypeId) REFERENCES mediaType(mediatypeId),
+    CONSTRAINT FK_Media_Post FOREIGN KEY (postId) REFERENCES post(postId) ON DELETE CASCADE,
+    CONSTRAINT FK_Media_Comment FOREIGN KEY (commentId) REFERENCES  comment(commentId),
     CONSTRAINT CHK_Media_Target CHECK (
         (postId IS NOT NULL AND commentId IS NULL) OR (postId IS NULL AND commentId IS NOT NULL)
     )
 );
 
-CREATE TABLE Message (
+CREATE TABLE message (
     messageId BIGINT IDENTITY(1,1) PRIMARY KEY,
     conversationId BIGINT NOT NULL,
     senderId BIGINT NOT NULL,
     content NVARCHAR(MAX) NOT NULL,
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE(),
 
-    CONSTRAINT FK_Message_Conversation FOREIGN KEY (conversationId) REFERENCES Conversation(conversationId) ON DELETE CASCADE,
-    CONSTRAINT FK_Message_Sender FOREIGN KEY (senderId) REFERENCES Users(userId)
+    CONSTRAINT FK_Message_Conversation FOREIGN KEY (conversationId) REFERENCES conversation(conversationId) ON DELETE CASCADE,
+    CONSTRAINT FK_Message_Sender FOREIGN KEY (senderId) REFERENCES users(userId)
 );
 
-CREATE TABLE UserRole (
+CREATE TABLE userRole (
     userId BIGINT NOT NULL,
     roleId INT NOT NULL,
     PRIMARY KEY (userId, roleId),
-    CONSTRAINT FK_UserRole_User FOREIGN KEY (userId) REFERENCES Users(userId) ON DELETE CASCADE,
-    CONSTRAINT FK_UserRole_Role FOREIGN KEY (roleId) REFERENCES Role(roleId) ON DELETE CASCADE
+    CONSTRAINT FK_userRole_User FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+    CONSTRAINT FK_userRole_Role FOREIGN KEY (roleId) REFERENCES role(roleId) ON DELETE CASCADE
 );
 
-CREATE TABLE ConversationParticipant (
+CREATE TABLE conversationParticipant (
     conversationId BIGINT NOT NULL,
     userId BIGINT NOT NULL,
     PRIMARY KEY (conversationId, userId),
-    CONSTRAINT FK_Participant_Conversation FOREIGN KEY (conversationId) REFERENCES Conversation(conversationId) ON DELETE CASCADE,
-    CONSTRAINT FK_Participant_User FOREIGN KEY (userId) REFERENCES Users(userId) ON DELETE CASCADE
+    CONSTRAINT FK_Participant_Conversation FOREIGN KEY (conversationId) REFERENCES conversation(conversationId) ON DELETE CASCADE,
+    CONSTRAINT FK_Participant_User FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE
 );
 
 
 -- ========= TẠO INDEXES ĐỂ TĂNG HIỆU NĂNG =========
 GO
-CREATE INDEX IX_User_Email ON Users(email);
-CREATE INDEX IX_Post_AuthorId ON Post(authorId);
-CREATE INDEX IX_Comment_PostId ON Comment(postId);
-CREATE INDEX IX_Reaction_PostId ON Reaction(postId);
-CREATE INDEX IX_Reaction_CommentId ON Reaction(commentId);
-CREATE INDEX IX_FriendRequest_ReceiverId ON FriendRequest(receiverId);
-CREATE INDEX IX_Message_ConversationId ON Message(conversationId);
-CREATE INDEX IX_Notification_RecipientId ON Notification(recipientId);
+CREATE INDEX IX_User_Email ON users(email);
+CREATE INDEX IX_Post_AuthorId ON post(authorId);
+CREATE INDEX IX_Comment_PostId ON comment(postId);
+CREATE INDEX IX_Reaction_PostId ON reaction(postId);
+CREATE INDEX IX_Reaction_CommentId ON reaction(commentId);
+CREATE INDEX IX_FriendRequest_ReceiverId ON friendRequest(receiverId);
+CREATE INDEX IX_Message_ConversationId ON message(conversationId);
+CREATE INDEX IX_Notification_RecipientId ON notification(recipientId);
 GO
 
 
 -- ========= CHÈN DỮ LIỆU BAN ĐẦU (SEED DATA) CHO CÁC BẢNG THAM CHIẾU =========
 GO
-INSERT INTO Privacy (privacyId, privacyName) VALUES
+INSERT INTO privacy (privacyId, privacyName) VALUES
 (1, 'Public'), (2, 'Friend'), (3, 'Private');
 
-INSERT INTO FriendRequestStatus (statusId, statusName) VALUES
+INSERT INTO friendRequestStatus (statusId, statusName) VALUES
 (1, 'Pending'), (2, 'Accepted'), (3, 'Rejected');
 
-INSERT INTO ReactionType (reactionTypeId, typeName) VALUES
+INSERT INTO reactionType (reactionTypeId, typeName) VALUES
 (1, 'Like'), (2, 'Love'), (3, 'Haha'), (4, 'Wow'), (5, 'Sad'), (6, 'Angry');
 
-INSERT INTO MediaType (mediaTypeId, typeName) VALUES
+INSERT INTO mediaType (mediaTypeId, typeName) VALUES
 (1, 'Image'), (2, 'Video');
 
-INSERT INTO Gender (genderId, genderName) VALUES
+INSERT INTO gender (genderId, genderName) VALUES
 (1, 'Male'), (2, 'Female'), (3, 'Other');
 
-INSERT INTO Role (roleId, roleName) VALUES
+INSERT INTO role (roleId, roleName) VALUES
 (1, 'ROLE_USER'), (2, 'ROLE_ADMIN');
 
 GO
