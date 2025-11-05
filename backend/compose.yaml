@@ -15,4 +15,4 @@ services:
       - 'MSSQL_PID=express'
       - 'MSSQL_SA_PASSWORD=verYs3cret'
     ports:
-      - '1433'
+      - '1434'

@@ -13,12 +13,26 @@ services:
       # Đồng ý với điều khoản của Microsoft
       ACCEPT_EULA: "Y"
       # Đặt mật khẩu cho tài khoản 'sa' (Super Admin)
-      SA_PASSWORD: "Your_Strong_Password123" # <-- Đổi mật khẩu này
+      SA_PASSWORD: "Your_Strong_Password123"
       MSSQL_PID: "Express" # Dùng bản Express miễn phí
     volumes:
       # "db_data" là một vùng lưu trữ để giữ dữ liệu
       # ngay cả khi bạn xóa container.
       - db_data:/var/opt/mssql
+      - ./database:/docker-entrypoint-initdb.d
+
+  db_init:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - database
+    volumes:
+      - ./database:/database
+    entrypoint: >
+      /bin/bash -c "
+        sleep 20 &&
+        /opt/mssql-tools/bin/sqlcmd -S database -U sa -P 'Your_Strong_Password123' -i /database/init.sql
+      "
+    
 
 # Định nghĩa "volume" để lưu trữ dữ liệu database
 volumes:
