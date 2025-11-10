@@ -45,7 +45,7 @@ CREATE TABLE gender (
     genderDescription NVARCHAR(100)
 );
 
-CREATE TABLE role (
+CREATE TABLE roles (
     roleId INT PRIMARY KEY,
     roleName NVARCHAR(50) NOT NULL UNIQUE,
     roleDescription NVARCHAR(100)
@@ -205,7 +205,7 @@ CREATE TABLE userRole (
     roleId INT NOT NULL,
     PRIMARY KEY (userId, roleId),
     CONSTRAINT FK_userRole_User FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
-    CONSTRAINT FK_userRole_Role FOREIGN KEY (roleId) REFERENCES role(roleId) ON DELETE CASCADE
+    CONSTRAINT FK_userRole_Role FOREIGN KEY (roleId) REFERENCES roles(roleId) ON DELETE CASCADE
 );
 
 CREATE TABLE conversationParticipant (
@@ -249,7 +249,7 @@ INSERT INTO mediaType (mediaTypeId, typeName) VALUES
 INSERT INTO gender (genderId, genderName) VALUES
 (1, 'Male'), (2, 'Female'), (3, 'Other');
 
-INSERT INTO role (roleId, roleName) VALUES
+INSERT INTO roles (roleId, roleName) VALUES
 (1, 'ROLE_USER'), (2, 'ROLE_ADMIN');
 
 GO
