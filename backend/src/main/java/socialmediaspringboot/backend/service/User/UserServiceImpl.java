@@ -39,16 +39,18 @@ public class UserServiceImpl implements UserService{
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        HashSet<Role> roles = new HashSet<>();
-        roleRepository.findByRoleName(PredefinedRoles.USER_ROLE).ifPresent(roles::add);
-        user.setRoles(roles);
+        Role userRole = roleRepository.findByRoleName("ROLE_USER")
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+//        HashSet<Role> roles = new HashSet<>();
+//        roles.add(userRole);
+//        user.setRoles(roles);
+        user.getRoles().add(userRole);
 
         try{
-            user = userRepository.save(user);
+           return user = userRepository.save(user);
         }catch(DataIntegrityViolationException e){
             throw new ApplicationContextException("errror", e);// placeholder before implement global error handler
         }
-        return userRepository.save(user);
     }
 
     @Override
