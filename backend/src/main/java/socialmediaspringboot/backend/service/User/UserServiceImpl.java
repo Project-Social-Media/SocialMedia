@@ -10,12 +10,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import socialmediaspringboot.backend.constant.PredefinedRoles;
 import socialmediaspringboot.backend.dto.UserDTO;
+import socialmediaspringboot.backend.exception.AppException;
+import socialmediaspringboot.backend.exception.ErrorCode;
 import socialmediaspringboot.backend.mapper.UserMapper;
 import socialmediaspringboot.backend.model.Role;
 import socialmediaspringboot.backend.model.User.User;
 import socialmediaspringboot.backend.repository.RoleRepository;
 import socialmediaspringboot.backend.repository.UserRepository;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -41,23 +45,26 @@ public class UserServiceImpl implements UserService{
 
         Role userRole = roleRepository.findByRoleName("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Role not found"));
-//        HashSet<Role> roles = new HashSet<>();
-//        roles.add(userRole);
-//        user.setRoles(roles);
-        user.getRoles().add(userRole);
+        HashSet<Role> roles = new HashSet<>();
+        roles.add(userRole);
+        user.setRoles(roles);
+//        user.getRoles().add(userRole);
+
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+        user.setCreatedAt(now);
 
         try{
            return user = userRepository.save(user);
         }catch(DataIntegrityViolationException e){
-            throw new ApplicationContextException("errror", e);// placeholder before implement global error handler
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
     }
 
     @Override
     public UserDTO getUser(long id){
-        return userMapper.toUserDTO(userRepository.findById(id)
-                .orElseThrow(() -> new ApplicationContextException("error")));
-        //needs to implement exception handler from global handler after
+        return userMapper.toUserDTO(userRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND))
+        );
     }
 
     @Override
@@ -71,7 +78,7 @@ public class UserServiceImpl implements UserService{
         String email = context.getAuthentication().getName();
 
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new ApplicationContextException("error") // placeholder before implement global error handler
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
 
         return userMapper.toUserDTO(user);
@@ -86,7 +93,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDTO updateUser(long userId, UserDTO request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApplicationContextException("error")); //need to throw new exception handler in global handler after
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)); //need to throw new exception handler in global handler after
         userMapper.updateUser(user, request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 

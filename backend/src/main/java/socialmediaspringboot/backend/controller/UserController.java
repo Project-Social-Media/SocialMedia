@@ -34,6 +34,13 @@ public class UserController {
         return apiResponse;
     }
 
+    @GetMapping("/{userId}")
+    ApiResponse<UserDTO> getUser(@PathVariable("userId") Long userId){
+        return ApiResponse.<UserDTO>builder()
+                .result(userService.getUser(userId))
+                .build();
+    }
+
 
     @GetMapping("/me")
     public ApiResponse<User> getCurrentUser(){

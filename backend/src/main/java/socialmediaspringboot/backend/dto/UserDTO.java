@@ -23,6 +23,6 @@ public class UserDTO {
     private String lastname;
     private Gender gender;
     private Date birth;
-//    private DateTime createdAt;
+    private DateTime createdAt;
     Set<Role> roles;
 }
