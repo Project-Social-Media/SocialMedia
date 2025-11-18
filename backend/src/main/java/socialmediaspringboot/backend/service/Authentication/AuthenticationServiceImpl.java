@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import socialmediaspringboot.backend.dto.AuthenticationRequest;
 import socialmediaspringboot.backend.dto.AuthenticationResponse;
 import socialmediaspringboot.backend.dto.LogoutDTO;
+import socialmediaspringboot.backend.exception.AppException;
+import socialmediaspringboot.backend.exception.ErrorCode;
 import socialmediaspringboot.backend.repository.UserRepository;
 
 @Service
@@ -38,16 +40,16 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     @Override
     public AuthenticationResponse loginWithRole(AuthenticationRequest request, String requiredRoleName) {
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Error")); //placeholder for global exception handler
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
-        if(!authenticated) throw new RuntimeException("error");//placeholder for global handler
+        if(!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         boolean hasRole = user.getRoles().stream().anyMatch(role -> role.getRoleName().equals(requiredRoleName));
 
-        if(!hasRole) throw new RuntimeException("error");//placeholder for global handler
+        if(!hasRole) throw new AppException(ErrorCode.UNAUTHORIZED_ACCESS);
 
 //        var token = generateToken();
 

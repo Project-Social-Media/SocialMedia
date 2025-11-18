@@ -19,7 +19,7 @@ public class UserAuthController {
 
     @PostMapping("/login")
     private ApiResponse<AuthenticationResponse> userAuthenticate(@RequestBody AuthenticationRequest request){
-        var authResult = authenticationService.loginWithRole(request, "USER");
+        var authResult = authenticationService.loginWithRole(request, "ROLE_USER");
         return ApiResponse.<AuthenticationResponse>builder()
                 .code(1)
                 .message("")
