@@ -6,6 +6,6 @@ import socialmediaspringboot.backend.dto.LogoutDTO;
 
 public interface AuthenticationService {
     AuthenticationResponse login(AuthenticationRequest request);
-    AuthenticationResponse loginWithRole(AuthenticationRequest request, String requiredRoleName);
+    AuthenticationResponse loginWithRole(AuthenticationRequest request);
     void logout(LogoutDTO request);
 }

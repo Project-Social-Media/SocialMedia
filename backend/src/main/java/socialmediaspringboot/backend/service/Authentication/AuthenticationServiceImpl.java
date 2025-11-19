@@ -2,8 +2,11 @@ package socialmediaspringboot.backend.service.Authentication;
 
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +15,9 @@ import socialmediaspringboot.backend.dto.AuthenticationResponse;
 import socialmediaspringboot.backend.dto.LogoutDTO;
 import socialmediaspringboot.backend.exception.AppException;
 import socialmediaspringboot.backend.exception.ErrorCode;
+import socialmediaspringboot.backend.model.User.MyUserDetails;
 import socialmediaspringboot.backend.repository.UserRepository;
+import socialmediaspringboot.backend.security.JwtService;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,12 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Override
     public AuthenticationResponse login(AuthenticationRequest request) {
@@ -38,23 +49,20 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     }
 
     @Override
-    public AuthenticationResponse loginWithRole(AuthenticationRequest request, String requiredRoleName) {
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    public AuthenticationResponse loginWithRole(AuthenticationRequest request) {
+        var authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
 
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
+        var userDetails = (MyUserDetails) authentication.getPrincipal();
 
-        if(!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
-
-        boolean hasRole = user.getRoles().stream().anyMatch(role -> role.getRoleName().equals(requiredRoleName));
-
-        if(!hasRole) throw new AppException(ErrorCode.UNAUTHORIZED_ACCESS);
-
-//        var token = generateToken();
+        var token = jwtService.generateToken(userDetails);
 
         return AuthenticationResponse.builder()
-                .token("placeholderString")
+                .token(token)
                 .isAuthenticated(true)
                 .build();
     }

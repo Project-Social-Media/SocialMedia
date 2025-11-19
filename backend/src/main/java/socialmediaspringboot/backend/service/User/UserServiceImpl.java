@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import socialmediaspringboot.backend.constant.PredefinedRoles;
 import socialmediaspringboot.backend.dto.UserDTO;
+import socialmediaspringboot.backend.dto.UserResponseDTO;
 import socialmediaspringboot.backend.exception.AppException;
 import socialmediaspringboot.backend.exception.ErrorCode;
 import socialmediaspringboot.backend.mapper.UserMapper;
@@ -61,8 +62,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDTO getUser(long id){
-        return userMapper.toUserDTO(userRepository.findById(id).orElseThrow(
+    public UserResponseDTO getUser(long id){
+        return userMapper.toUserResponseDTO(userRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_FOUND))
         );
     }
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDTO getMyInfo(){
+    public UserResponseDTO  getMyInfo(){
         var context = SecurityContextHolder.getContext();
         String email = context.getAuthentication().getName();
 
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService{
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
 
-        return userMapper.toUserDTO(user);
+        return userMapper.toUserResponseDTO(user);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDTO updateUser(long userId, UserDTO request) {
+    public UserResponseDTO updateUser(long userId, UserDTO request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)); //need to throw new exception handler in global handler after
         userMapper.updateUser(user, request);
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService{
         //var roles = roleRepository.find(request.getRoles());
         //user.setRoles(new HashSet<>(roles));
 
-        return userMapper.toUserDTO(userRepository.save(user));
+        return userMapper.toUserResponseDTO(userRepository.save(user));
     }
 
     @Override

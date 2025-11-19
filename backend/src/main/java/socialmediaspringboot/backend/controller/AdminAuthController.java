@@ -19,7 +19,7 @@ public class AdminAuthController {
 
     @PostMapping("/login")
     private ApiResponse<AuthenticationResponse> userAuthenticate(@RequestBody AuthenticationRequest request) {
-        var authResult = authenticationService.loginWithRole(request, "ROLE_ADMIN");
+        var authResult = authenticationService.loginWithRole(request);
         return ApiResponse.<AuthenticationResponse>builder()
                 .code(1)
                 .message("")

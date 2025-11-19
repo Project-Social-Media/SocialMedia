@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import socialmediaspringboot.backend.dto.UserDTO;
+import socialmediaspringboot.backend.dto.UserResponseDTO;
 import socialmediaspringboot.backend.model.User.User;
 
 import java.util.Optional;
@@ -16,7 +17,7 @@ public interface UserMapper {
     User toUser(UserDTO request);
 
     @Mapping(target="roles", ignore = true)
-    UserDTO toUserDTO (User user);
+    UserResponseDTO toUserResponseDTO (User user);
 
     @Mapping(target="roles", ignore = true)
     @Mapping(target = "userId", ignore = true)

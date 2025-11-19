@@ -8,11 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import socialmediaspringboot.backend.dto.ApiResponse;
 import socialmediaspringboot.backend.dto.UpdateProfileRequest;
 import socialmediaspringboot.backend.dto.UserDTO;
+import socialmediaspringboot.backend.dto.UserResponseDTO;
 import socialmediaspringboot.backend.model.Gender;
 import socialmediaspringboot.backend.model.User.User;
 import socialmediaspringboot.backend.repository.GenderRepository;
 import socialmediaspringboot.backend.repository.UserRepository;
 import socialmediaspringboot.backend.service.User.UserServiceImpl;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,9 +37,16 @@ public class UserController {
         return apiResponse;
     }
 
+    @GetMapping("/list")
+    ApiResponse<List<User>> getListUser(){
+        return ApiResponse.<List<User>>builder()
+                .result(userService.getAllUsers())
+                .build();
+    }
+
     @GetMapping("/{userId}")
-    ApiResponse<UserDTO> getUser(@PathVariable("userId") Long userId){
-        return ApiResponse.<UserDTO>builder()
+    ApiResponse<UserResponseDTO> getUser(@PathVariable("userId") Long userId){
+        return ApiResponse.<UserResponseDTO>builder()
                 .result(userService.getUser(userId))
                 .build();
     }
