@@ -1,5 +1,6 @@
 package socialmediaspringboot.backend.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -12,13 +13,14 @@ import socialmediaspringboot.backend.dto.ApiResponse;
  * This class contains methods for returning organized message
  *  when the application encountered an exception
  */
-
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(Exception exception){
         ApiResponse apiResponse = new ApiResponse();
+        log.error("Uncategorized exception: ", exception);
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
         apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);

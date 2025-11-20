@@ -5,9 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
+import org.springframework.cglib.core.Local;
 import socialmediaspringboot.backend.model.Gender;
 import socialmediaspringboot.backend.model.Role;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +26,6 @@ public class UserResponseDTO {
     private String lastname;
     private Gender gender;
     private Date birth;
-    private DateTime createdAt;
+    private LocalDateTime createdAt;
     Set<Role> roles;
 }

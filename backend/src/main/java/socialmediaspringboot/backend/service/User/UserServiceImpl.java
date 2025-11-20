@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponseDTO getUser(long id){
+    public UserResponseDTO getUser(Long id){
         return userMapper.toUserResponseDTO(userRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_FOUND))
         );
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponseDTO updateUser(long userId, UserDTO request) {
+    public UserResponseDTO updateUser(Long userId, UserDTO request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)); //need to throw new exception handler in global handler after
         userMapper.updateUser(user, request);
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteUser(long id) {
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 }
