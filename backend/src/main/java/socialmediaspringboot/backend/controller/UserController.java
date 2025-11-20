@@ -2,16 +2,12 @@ package socialmediaspringboot.backend.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import socialmediaspringboot.backend.dto.ApiResponse;
 import socialmediaspringboot.backend.dto.UpdateProfileRequest;
 import socialmediaspringboot.backend.dto.UserDTO;
 import socialmediaspringboot.backend.dto.UserResponseDTO;
-import socialmediaspringboot.backend.model.Gender;
 import socialmediaspringboot.backend.model.User.User;
-import socialmediaspringboot.backend.repository.GenderRepository;
 import socialmediaspringboot.backend.repository.UserRepository;
 import socialmediaspringboot.backend.service.User.UserServiceImpl;
 
@@ -24,8 +20,7 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @Autowired
-    private GenderRepository genderRepository;
+
 
     @Autowired
     private UserRepository userRepository;
@@ -53,41 +48,24 @@ public class UserController {
 
 
     @GetMapping("/me")
-    public ApiResponse<User> getCurrentUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(()-> new RuntimeException("User not found"));
-        ApiResponse<User> response = new ApiResponse<>();
-        response.setResult(user);
-        response.setMessage("Fetch successfully");
-        return response;
+    public ApiResponse<UserResponseDTO> getCurrentUser(){
+       return ApiResponse.<UserResponseDTO>builder()
+               .result(userService.getMyInfo())
+               .build();
     }
 
-    @PutMapping("/me")
-    public ApiResponse<User> updateProfile(@RequestBody @Valid UpdateProfileRequest request){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        user.setFirstname(request.getFirstname());
-        user.setLastname(request.getLastname());
-        user.setBirth(request.getBirth());
-
-        if (request.getGenderId() != null){
-            Gender gender = genderRepository.findById(request.getGenderId())
-                    .orElseThrow(() -> new RuntimeException("Gender not found"));
-            user.setGender(gender);
-        }
-
-        User updatedUser = userRepository.save(user);
-        ApiResponse<User> response = new ApiResponse<>();
-        response.setResult(updatedUser);
-        response.setMessage("Update successfully");
-        return response;
+    @PutMapping("/update")
+    public ApiResponse<UserResponseDTO> updateProfile(@RequestBody @Valid UpdateProfileRequest request){
+        return ApiResponse.<UserResponseDTO>builder()
+                .result(userService.updateUser(request))
+                .build();
     }
 
+    @DeleteMapping("/{userId}")
+    public ApiResponse<Void> deleteUser(@PathVariable("userId") Long userId){
+        userService.deleteUser(userId);
+        return ApiResponse.<Void>builder()
+                .message("User deleted successfully")
+                .build();
+    }
 }
