@@ -42,7 +42,7 @@ public class SecurityConfig {
                 }))
                 .authorizeHttpRequests(auth -> auth  // phan quyen
                         .requestMatchers("/api/auth/**").permitAll() // cho signup, login
-                        .requestMatchers("/api/admin/**").hasRole("ROLE_ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/users/create").permitAll()
                         .requestMatchers("/api/users/**").authenticated()
                         .anyRequest().permitAll()

@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService{
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        Role userRole = roleRepository.findByRoleName("ROLE_USER")
+        Role userRole = roleRepository.findByRoleName("USER")
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         HashSet<Role> roles = new HashSet<>();
         roles.add(userRole);

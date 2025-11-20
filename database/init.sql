@@ -250,7 +250,7 @@ INSERT INTO gender (genderId, genderName) VALUES
 (1, 'Male'), (2, 'Female'), (3, 'Other');
 
 INSERT INTO roles (roleId, roleName) VALUES
-(1, 'ROLE_USER'), (2, 'ROLE_ADMIN');
+(1, 'USER'), (2, 'ADMIN');
 
 GO
 PRINT 'Database schema created successfully!';
