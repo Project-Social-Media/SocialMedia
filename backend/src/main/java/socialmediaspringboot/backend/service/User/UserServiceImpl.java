@@ -5,17 +5,21 @@ import org.springframework.context.ApplicationContextException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import socialmediaspringboot.backend.constant.PredefinedRoles;
+import socialmediaspringboot.backend.dto.UpdateProfileRequest;
 import socialmediaspringboot.backend.dto.UserDTO;
 import socialmediaspringboot.backend.dto.UserResponseDTO;
 import socialmediaspringboot.backend.exception.AppException;
 import socialmediaspringboot.backend.exception.ErrorCode;
 import socialmediaspringboot.backend.mapper.UserMapper;
+import socialmediaspringboot.backend.model.Gender;
 import socialmediaspringboot.backend.model.Role;
 import socialmediaspringboot.backend.model.User.User;
+import socialmediaspringboot.backend.repository.GenderRepository;
 import socialmediaspringboot.backend.repository.RoleRepository;
 import socialmediaspringboot.backend.repository.UserRepository;
 
@@ -35,7 +39,8 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserMapper userMapper;
-
+    @Autowired
+    private GenderRepository genderRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -75,12 +80,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserResponseDTO  getMyInfo(){
-        var context = SecurityContextHolder.getContext();
-        String email = context.getAuthentication().getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
 
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new RuntimeException("User not found"));
 
         return userMapper.toUserResponseDTO(user);
     }
@@ -92,17 +96,26 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponseDTO updateUser(long userId, UserDTO request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)); //need to throw new exception handler in global handler after
-        userMapper.updateUser(user, request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+    public UserResponseDTO updateUser(UpdateProfileRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        //need to get all the roles of the account here
-        //var roles = roleRepository.find(request.getRoles());
-        //user.setRoles(new HashSet<>(roles));
+        user.setFirstname(request.getFirstname());
+        user.setLastname(request.getLastname());
+        user.setBirth(request.getBirth());
 
-        return userMapper.toUserResponseDTO(userRepository.save(user));
+        if (request.getGenderId() != null){
+            Gender gender = genderRepository.findById(request.getGenderId())
+                    .orElseThrow(() -> new RuntimeException("Gender not found"));
+            user.setGender(gender);
+        }
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+        User updatedUser = userRepository.save(user);
+        return userMapper.toUserResponseDTO(updatedUser);
     }
 
     @Override
