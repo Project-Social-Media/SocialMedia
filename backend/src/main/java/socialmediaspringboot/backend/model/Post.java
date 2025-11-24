@@ -42,6 +42,7 @@ public class Post {
     @JoinColumn(name = "privacyId", nullable = false)
     private Privacy privacy;
 
+    @Builder.Default
     private int shareCount =0;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

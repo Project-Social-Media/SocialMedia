@@ -56,5 +56,6 @@ public class User {
 
     @JsonManagedReference // parent reference
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = false)
+    @Column(nullable = true)
     private List<Post> posts = new ArrayList<>();
 }

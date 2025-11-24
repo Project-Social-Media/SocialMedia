@@ -7,9 +7,11 @@ import lombok.Setter;
 import org.joda.time.DateTime;
 import org.springframework.cglib.core.Local;
 import socialmediaspringboot.backend.model.Gender;
+import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.Role;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -28,4 +30,5 @@ public class UserResponseDTO {
     private Date birth;
     private LocalDateTime createdAt;
     Set<Role> roles;
+    private List<Post> posts = new ArrayList<>();
 }

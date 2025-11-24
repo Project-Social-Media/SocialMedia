@@ -2,6 +2,7 @@ package socialmediaspringboot.backend.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import socialmediaspringboot.backend.dto.Post.PostDTO;
 import socialmediaspringboot.backend.dto.Post.PostResponseDTO;
 import socialmediaspringboot.backend.model.Post;
@@ -31,5 +32,5 @@ public interface PostMapper {
     @Mapping(target = "originalPost", ignore = true)
     @Mapping(target = "shareCount", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    void updatePostFromDTO(PostDTO dto, Post post);
+    void updatePostFromDTO(PostDTO dto, @MappingTarget Post post);
 }
