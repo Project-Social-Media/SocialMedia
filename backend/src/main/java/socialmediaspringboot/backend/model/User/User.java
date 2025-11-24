@@ -1,15 +1,15 @@
 package socialmediaspringboot.backend.model.User;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.joda.time.DateTime;
 import socialmediaspringboot.backend.model.Gender;
+import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.Role;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -53,4 +53,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "roleId")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @JsonManagedReference // parent reference
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<Post> posts = new ArrayList<>();
 }

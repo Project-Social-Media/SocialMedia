@@ -1,0 +1,83 @@
+package socialmediaspringboot.backend.controller;
+
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import socialmediaspringboot.backend.dto.ApiResponse;
+import socialmediaspringboot.backend.dto.Post.PostDTO;
+import socialmediaspringboot.backend.dto.Post.PostResponseDTO;
+import socialmediaspringboot.backend.service.Post.PostServiceImpl;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/posts")
+public class PostController {
+
+    @Autowired
+    PostServiceImpl postService;
+
+    @PostMapping("/user/{userId}")
+    public ApiResponse<PostResponseDTO> createPost(@PathVariable Long userId, @RequestBody @Valid PostDTO postDTO){
+        PostResponseDTO createdPost = postService.createPost(userId,postDTO);
+        return ApiResponse.<PostResponseDTO>builder()
+                .result(createdPost)
+                .message("Create Post successfully")
+                .build();
+    }
+
+    @PutMapping("/{postId}")
+    public ApiResponse<PostResponseDTO> updatePost(@PathVariable Long postId, @RequestBody @Valid PostDTO postDTO){
+        PostResponseDTO updatedPost = postService.updatePost(postId,postDTO);
+        return ApiResponse.<PostResponseDTO>builder()
+                .result(updatedPost)
+                .message("Update Post successfully")
+                .build();
+
+    }
+
+    @DeleteMapping("/{postId}")
+    public ApiResponse<Void> deletePost(@PathVariable Long postId){
+        postService.deletePost(postId);
+        return ApiResponse.<Void>builder()
+                .message("Delete post successfully")
+                .build();
+    }
+
+    @GetMapping("/list")
+    public ApiResponse<List<PostResponseDTO>> getAllPosts(){
+        List<PostResponseDTO> posts = postService.getAllPost();
+        return ApiResponse.<List<PostResponseDTO>>builder()
+                .result(posts)
+                .build();
+    }
+
+    @GetMapping("/{postId}")
+    public ApiResponse<PostResponseDTO> getPostById(@PathVariable Long postId){
+        PostResponseDTO post = postService.getPostById(postId);
+        return ApiResponse.<PostResponseDTO>builder()
+                .result(post)
+                .build();
+
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<List<PostResponseDTO>> getPostByKeyword(@RequestParam String keyword) {
+        List<PostResponseDTO> posts = postService.getPostByKeyword(keyword);
+        return ApiResponse.<List<PostResponseDTO>>builder()
+                .result(posts)
+                .build();
+    }
+
+    @PostMapping("/{originalPostId}/share/user/{userId}")
+    public ApiResponse<PostResponseDTO> sharePost(
+            @PathVariable Long originalPostId,
+            @PathVariable Long userId,
+            @RequestParam(required = false) String caption) {
+        PostResponseDTO sharedPost = postService.sharePost(originalPostId, userId, caption);
+        return ApiResponse.<PostResponseDTO>builder()
+                .result(sharedPost)
+                .message("Post shared successfully")
+                .build();
+    }
+}

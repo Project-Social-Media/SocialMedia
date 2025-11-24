@@ -114,6 +114,7 @@ public class UserServiceImpl implements UserService{
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
+        userMapper.updateUser(user, request);
         User updatedUser = userRepository.save(user);
         return userMapper.toUserResponseDTO(updatedUser);
     }
