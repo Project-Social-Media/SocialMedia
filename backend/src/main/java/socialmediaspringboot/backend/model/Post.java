@@ -34,11 +34,11 @@ public class Post {
     // =======================
     // Self-reference (Share)
     // =======================
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "originalpostId")
     private Post originalPost;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "privacyId", nullable = false)
     private Privacy privacy;
 

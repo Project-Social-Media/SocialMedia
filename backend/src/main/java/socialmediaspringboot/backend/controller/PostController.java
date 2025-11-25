@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import socialmediaspringboot.backend.dto.ApiResponse;
 import socialmediaspringboot.backend.dto.Post.PostDTO;
 import socialmediaspringboot.backend.dto.Post.PostResponseDTO;
+import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.service.Post.PostServiceImpl;
 
 import java.util.List;
@@ -45,9 +46,9 @@ public class PostController {
     }
 
     @GetMapping("/list")
-    public ApiResponse<List<PostResponseDTO>> getAllPosts(){
-        List<PostResponseDTO> posts = postService.getAllPost();
-        return ApiResponse.<List<PostResponseDTO>>builder()
+    public ApiResponse<List<Post>> getAllPosts(){
+        List<Post> posts = postService.getAllPost();
+        return ApiResponse.<List<Post>>builder()
                 .result(posts)
                 .build();
     }

@@ -2,6 +2,7 @@ package socialmediaspringboot.backend.service.Post;
 
 import socialmediaspringboot.backend.dto.Post.PostDTO;
 import socialmediaspringboot.backend.dto.Post.PostResponseDTO;
+import socialmediaspringboot.backend.model.Post;
 
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface PostService {
 
     void deletePost(Long postId);
 
-    List<PostResponseDTO> getAllPost();
+    List<Post> getAllPost();
     PostResponseDTO getPostById(Long postId);
     List<PostResponseDTO> getPostByKeyword(String keyword);
 
