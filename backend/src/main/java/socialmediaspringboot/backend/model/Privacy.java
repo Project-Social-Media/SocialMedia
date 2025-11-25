@@ -13,7 +13,6 @@ import lombok.*;
 @Table(name = "privacy")
 public class Privacy {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "privacyId", nullable = false)
     private Long privacyId;
 

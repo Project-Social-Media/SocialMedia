@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import socialmediaspringboot.backend.model.Post;
+import socialmediaspringboot.backend.model.Privacy;
 
 @Getter
 @Setter
@@ -11,6 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostDTO {
     private String content;
-    private Long privacyId;
-    private Long orignalPostId;
+    private Privacy privacy;
+    private Post originalPost;
 }

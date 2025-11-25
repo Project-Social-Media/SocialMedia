@@ -11,7 +11,7 @@ import socialmediaspringboot.backend.model.Post;
 public interface PostMapper {
     @Mapping(target = "postId", ignore = true)
     @Mapping(target = "author", ignore = true)
-    @Mapping(target = "privacy", ignore = true)
+    //@Mapping(target = "privacy", ignore = true)
     @Mapping(target = "originalPost", ignore = true)
     @Mapping(target = "shareCount", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
@@ -21,16 +21,17 @@ public interface PostMapper {
     // Entity -> ResponseDTO
     @Mapping(target = "authorId", source = "author.userId")
     @Mapping(target = "authorEmail", source = "author.email")
-    @Mapping(target = "originalPostId", source = "originalPost.postId")
-    @Mapping(target = "privacyId", source = "privacy.privacyId")
+    @Mapping(target = "originalPost")
+    @Mapping(target = "privacy")
     PostResponseDTO PostResponseDTO(Post post);
 
     // UPDATE
     @Mapping(target = "postId", ignore = true)
     @Mapping(target = "author", ignore = true)
-    @Mapping(target = "privacy", ignore = true)
+    //@Mapping(target = "privacy", ignore = true)
     @Mapping(target = "originalPost", ignore = true)
     @Mapping(target = "shareCount", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     void updatePostFromDTO(PostDTO dto, @MappingTarget Post post);
 }
