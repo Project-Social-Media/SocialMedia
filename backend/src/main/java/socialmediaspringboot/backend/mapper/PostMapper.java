@@ -21,9 +21,9 @@ public interface PostMapper {
     // Entity -> ResponseDTO
     @Mapping(target = "authorId", source = "author.userId")
     @Mapping(target = "authorEmail", source = "author.email")
-    @Mapping(target = "originalPost")
-    @Mapping(target = "privacy")
-    PostResponseDTO PostResponseDTO(Post post);
+    @Mapping(target = "originalPostId", source = "originalPost.postId")
+    @Mapping(target = "privacy", source = "privacy")
+    PostResponseDTO toPostResponseDTO(Post post);
 
     // UPDATE
     @Mapping(target = "postId", ignore = true)

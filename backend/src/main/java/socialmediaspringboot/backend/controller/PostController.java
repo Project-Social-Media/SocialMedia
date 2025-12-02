@@ -45,9 +45,9 @@ public class PostController {
                 .build();
     }
 
-    @GetMapping("/list")
-    public ApiResponse<List<Post>> getAllPosts(){
-        List<Post> posts = postService.getAllPost();
+    @GetMapping("/list/{userId}")
+    public ApiResponse<List<Post>> getAllPosts(@PathVariable Long userId){
+        List<Post> posts = postService.getAllPost(userId);
         return ApiResponse.<List<Post>>builder()
                 .result(posts)
                 .build();

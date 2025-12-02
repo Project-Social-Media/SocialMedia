@@ -14,5 +14,5 @@ import socialmediaspringboot.backend.model.Privacy;
 public class PostDTO {
     private String content;
     private Privacy privacy;
-    private Post originalPost;
+    private Long originalPostId;
 }

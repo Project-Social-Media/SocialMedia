@@ -19,7 +19,7 @@ public class PostResponseDTO {
     private Long authorId;
     private String authorEmail;
 
-    private Post originalPost;
+    private Long originalPostId;
     private Privacy privacy;
 
     private int shareCount;

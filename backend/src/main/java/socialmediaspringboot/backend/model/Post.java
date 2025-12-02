@@ -55,9 +55,4 @@ public class Post {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now(); // set khi tạo
     }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now(); // set khi update
-    }
 }

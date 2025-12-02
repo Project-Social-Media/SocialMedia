@@ -1,7 +1,8 @@
 package socialmediaspringboot.backend.service.Post;
 
-import jakarta.transaction.TransactionScoped;
+
 import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import socialmediaspringboot.backend.dto.Post.PostDTO;
@@ -11,6 +12,12 @@ import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.User.User;
 import socialmediaspringboot.backend.repository.PostRepository;
 import socialmediaspringboot.backend.repository.UserRepository;
+
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,7 +45,7 @@ public class PostServiceImpl implements PostService{
         post.setAuthor(user);
 
         Post savedPost = postRepository.save(post);
-        return postMapper.PostResponseDTO(savedPost);
+        return postMapper.toPostResponseDTO(savedPost);
     }
     @Override
     @Transactional
@@ -46,8 +53,11 @@ public class PostServiceImpl implements PostService{
         Post postExisting = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
        postMapper.updatePostFromDTO(postDTO, postExisting);
-       Post updatedPost = postRepository.save(postExisting);
-        return postMapper.PostResponseDTO(updatedPost);
+        postExisting.setUpdatedAt(LocalDateTime.now());
+
+        Post updatedPost = postRepository.save(postExisting);
+
+        return postMapper.toPostResponseDTO(updatedPost);
     }
 
     @Override
@@ -57,23 +67,40 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<Post> getAllPost() {
+    @Transactional
+    public Page<PostResponseDTO> getPostsByUser(Long userId, Pageable pageable) {
+        Pageable sortedPageable = Pageable.unpaged();
+        if (pageable != null) {
+            sortedPageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by("createdAt").descending()
+            );
+        }
 
-        return postRepository.findAll();
+        Page<Post> postPage = postRepository.findByAuthor_UserId(userId, sortedPageable);
+
+        return postPage.map(post -> postMapper.toPostResponseDTO(post));
+    }
+
+    @Override
+    public List<Post> getAllPost(Long userId) {
+
+        return postRepository.findAllByAuthor_UserIdOrderByCreatedAtDesc(userId);
     }
 
     @Override
     public PostResponseDTO  getPostById(Long postId) {
         Post post =  postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
-        return postMapper.PostResponseDTO(post);
+        return postMapper.toPostResponseDTO(post);
     }
 
     @Override
     public List<PostResponseDTO> getPostByKeyword(String keyword) {
         return postRepository.findByContentContainingIgnoreCase(keyword)
                 .stream()
-                .map(postMapper::PostResponseDTO)
+                .map(postMapper::toPostResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -94,6 +121,6 @@ public class PostServiceImpl implements PostService{
                 .shareCount(0)
                 .build();
 
-        return postMapper.PostResponseDTO(postRepository.save(sharePost));
+        return postMapper.toPostResponseDTO(postRepository.save(sharePost));
     }
 }
