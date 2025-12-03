@@ -30,6 +30,6 @@ build/
 !**/src/test/**/build/
 
 ### Environment Variables ###
-.env.*
+.env
 ### VS Code ###
 .vscode/
