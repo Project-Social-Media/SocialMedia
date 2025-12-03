@@ -1,4 +1,4 @@
-package socialmediaspringboot.backend.security;
+package socialmediaspringboot.backend.config;
 
 import lombok.experimental.NonFinal;
 import org.slf4j.Logger;

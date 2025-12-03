@@ -1,9 +1,9 @@
 package socialmediaspringboot.backend.service.User;
 
 import org.springframework.data.domain.Page;
-import socialmediaspringboot.backend.dto.UpdateProfileRequest;
-import socialmediaspringboot.backend.dto.UserDTO;
-import socialmediaspringboot.backend.dto.UserResponseDTO;
+import socialmediaspringboot.backend.dto.User.UpdateProfileRequest;
+import socialmediaspringboot.backend.dto.User.UserDTO;
+import socialmediaspringboot.backend.dto.User.UserResponseDTO;
 import socialmediaspringboot.backend.model.User.User;
 
 import java.util.List;

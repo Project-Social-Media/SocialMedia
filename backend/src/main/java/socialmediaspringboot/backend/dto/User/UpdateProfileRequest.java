@@ -1,4 +1,4 @@
-package socialmediaspringboot.backend.dto;
+package socialmediaspringboot.backend.dto.User;
 
 
 import lombok.Data;

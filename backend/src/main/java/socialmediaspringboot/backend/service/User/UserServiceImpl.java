@@ -1,7 +1,6 @@
 package socialmediaspringboot.backend.service.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContextException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,10 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import socialmediaspringboot.backend.constant.PredefinedRoles;
-import socialmediaspringboot.backend.dto.UpdateProfileRequest;
-import socialmediaspringboot.backend.dto.UserDTO;
-import socialmediaspringboot.backend.dto.UserResponseDTO;
+import socialmediaspringboot.backend.dto.User.UpdateProfileRequest;
+import socialmediaspringboot.backend.dto.User.UserDTO;
+import socialmediaspringboot.backend.dto.User.UserResponseDTO;
 import socialmediaspringboot.backend.exception.AppException;
 import socialmediaspringboot.backend.exception.ErrorCode;
 import socialmediaspringboot.backend.mapper.UserMapper;
@@ -27,7 +25,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{

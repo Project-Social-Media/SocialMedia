@@ -4,9 +4,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import socialmediaspringboot.backend.dto.ApiResponse;
-import socialmediaspringboot.backend.dto.UpdateProfileRequest;
-import socialmediaspringboot.backend.dto.UserDTO;
-import socialmediaspringboot.backend.dto.UserResponseDTO;
+import socialmediaspringboot.backend.dto.User.UpdateProfileRequest;
+import socialmediaspringboot.backend.dto.User.UserDTO;
+import socialmediaspringboot.backend.dto.User.UserResponseDTO;
 import socialmediaspringboot.backend.model.User.User;
 import socialmediaspringboot.backend.repository.UserRepository;
 import socialmediaspringboot.backend.service.User.UserServiceImpl;
@@ -19,8 +19,6 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
-
-
 
     @Autowired
     private UserRepository userRepository;

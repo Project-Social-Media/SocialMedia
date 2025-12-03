@@ -175,13 +175,17 @@ WHERE postId IS NULL;
 CREATE TABLE media (
     mediaId BIGINT IDENTITY(1,1) PRIMARY KEY,
     mediaUrl NVARCHAR(500) NOT NULL,
+    mediaSize INT NOT NULL,
     mediatypeId INT NOT NULL,
     uploadorder INT NOT NULL DEFAULT 0,
+    cloudId NVARCHAR(255) NOT NULL,
+    userId BIGINT NOT NULL,
     postId BIGINT NULL,
     commentId BIGINT NULL,
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE(),
 
-    CONSTRAINT FK_Media_Type FOREIGN KEY (mediatypeId) REFERENCES mediaType(mediatypeId),
+    CONSTRAINT FK_Media_Type FOREIGN KEY (mediatypeId) REFERENCES mediaType(mediaTypeId),
+    CONSTRAINT FK_Media_User FOREIGN KEY (userId) REFERENCES users(userId),
     CONSTRAINT FK_Media_Post FOREIGN KEY (postId) REFERENCES post(postId) ON DELETE CASCADE,
     CONSTRAINT FK_Media_Comment FOREIGN KEY (commentId) REFERENCES  comment(commentId),
     CONSTRAINT CHK_Media_Target CHECK (

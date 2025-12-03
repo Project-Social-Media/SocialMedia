@@ -29,7 +29,13 @@ services:
       - ./database:/database
     entrypoint: >
       /bin/bash -c "until /opt/mssql-tools/bin/sqlcmd -S database -U sa -P 'Your_Strong_Password123' -Q 'SELECT 1'; do echo 'Waiting for SQL Server...'; sleep 5; done; /opt/mssql-tools/bin/sqlcmd -S database -U sa -P 'Your_Strong_Password123' -i /database/init.sql; echo 'Init SQL executed.'"
-    
+#  app:
+#    container_name: env_container
+#    build: .
+#    volumes:
+#      - /home/web/log:/log
+#    env_file:
+#      - .env.be.dev
 
 # Định nghĩa "volume" để lưu trữ dữ liệu database
 volumes:

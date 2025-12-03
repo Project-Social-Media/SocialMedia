@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import socialmediaspringboot.backend.dto.ApiResponse;
-import socialmediaspringboot.backend.dto.AuthenticationRequest;
-import socialmediaspringboot.backend.dto.AuthenticationResponse;
+import socialmediaspringboot.backend.dto.Authentication.AuthenticationRequest;
+import socialmediaspringboot.backend.dto.Authentication.AuthenticationResponse;
 import socialmediaspringboot.backend.service.Authentication.AuthenticationServiceImpl;
 
 @RestController

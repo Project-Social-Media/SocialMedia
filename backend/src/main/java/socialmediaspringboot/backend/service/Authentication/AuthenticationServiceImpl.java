@@ -10,11 +10,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import socialmediaspringboot.backend.dto.AuthenticationRequest;
-import socialmediaspringboot.backend.dto.AuthenticationResponse;
-import socialmediaspringboot.backend.dto.LogoutDTO;
-import socialmediaspringboot.backend.exception.AppException;
-import socialmediaspringboot.backend.exception.ErrorCode;
+import socialmediaspringboot.backend.dto.Authentication.AuthenticationRequest;
+import socialmediaspringboot.backend.dto.Authentication.AuthenticationResponse;
+import socialmediaspringboot.backend.dto.Authentication.LogoutDTO;
 import socialmediaspringboot.backend.model.User.MyUserDetails;
 import socialmediaspringboot.backend.repository.UserRepository;
 import socialmediaspringboot.backend.security.JwtService;

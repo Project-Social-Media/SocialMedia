@@ -1,11 +1,9 @@
-package socialmediaspringboot.backend.dto;
+package socialmediaspringboot.backend.dto.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.DateTime;
-import org.springframework.cglib.core.Local;
 import socialmediaspringboot.backend.model.Gender;
 import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.Role;
