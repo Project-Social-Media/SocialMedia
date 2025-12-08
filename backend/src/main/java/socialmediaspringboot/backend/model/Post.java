@@ -2,6 +2,7 @@ package socialmediaspringboot.backend.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import socialmediaspringboot.backend.model.User.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -55,4 +58,9 @@ public class Post {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now(); // set khi tạo
     }
+
+    @JsonManagedReference // parent reference
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.ALL, orphanRemoval = false)
+    @Column(nullable = true)
+    private List<Media> mediaList = new ArrayList<>();
 }

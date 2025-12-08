@@ -16,6 +16,7 @@ public interface PostMapper {
     @Mapping(target = "shareCount", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "mediaList", ignore = true)
     Post toPost(PostDTO dto);
 
     // Entity -> ResponseDTO
@@ -33,5 +34,6 @@ public interface PostMapper {
     @Mapping(target = "shareCount", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "mediaList", ignore = true)
     void updatePostFromDTO(PostDTO dto, @MappingTarget Post post);
 }

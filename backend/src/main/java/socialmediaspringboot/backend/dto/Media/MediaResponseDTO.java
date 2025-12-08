@@ -17,11 +17,11 @@ import java.time.LocalDateTime;
 public class MediaResponseDTO {
     private Long mediaId;
     private String mediaUrl;
-    private MediaType mediatypeId;
+    private Integer mediatypeId;
     private int uploadorder;
     private String cloudId;
-    private User userId;
-    private Post postId;
+    private Long userId;
+    private Long postId;
     //    private Comment commentId;
     private LocalDateTime createdAt;
 

@@ -1,5 +1,6 @@
 package socialmediaspringboot.backend.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,11 +21,13 @@ public class MediaController {
     private final MediaMapper mediaMapper;
 
     @PostMapping("/upload")
-    public ApiResponse<MediaResponseDTO> uploadImage(@RequestPart MultipartFile file, @RequestPart MediaRequestDTO request) {
-        Media media = mediaService.upload(file, request);
-        MediaResponseDTO responseDTO = mediaMapper.toMediaResponseDTO(media);
+    public ApiResponse<MediaResponseDTO> uploadImage(@RequestPart MultipartFile file, @RequestPart @Valid MediaRequestDTO request) {
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("File must not be empty");
+        }
+        MediaResponseDTO media = mediaService.upload(file, request);
         return ApiResponse.<MediaResponseDTO>builder()
-                .result(responseDTO)
+                .result(media)
                 .build();
     }
 }

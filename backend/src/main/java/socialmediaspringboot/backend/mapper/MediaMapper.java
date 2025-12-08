@@ -14,5 +14,8 @@ public interface MediaMapper {
     Media toMedia(MediaRequestDTO request);
 
     @Mapping(target = "mediaId", ignore = false)
+    @Mapping(source = "mediatypeId.mediaTypeId", target = "mediatypeId")
+    @Mapping(source = "userId.userId", target = "userId")
+    @Mapping(source = "postId.postId", target = "postId")
     MediaResponseDTO toMediaResponseDTO (Media media);
 }
