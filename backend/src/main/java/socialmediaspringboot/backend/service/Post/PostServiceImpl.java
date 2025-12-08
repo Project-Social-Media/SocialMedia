@@ -5,11 +5,19 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import socialmediaspringboot.backend.dto.Media.MediaRequestDTO;
+import socialmediaspringboot.backend.dto.Media.MediaResponseDTO;
 import socialmediaspringboot.backend.dto.Post.PostDTO;
 import socialmediaspringboot.backend.dto.Post.PostResponseDTO;
+import socialmediaspringboot.backend.mapper.MediaMapper;
 import socialmediaspringboot.backend.mapper.PostMapper;
+import socialmediaspringboot.backend.model.Media;
+import socialmediaspringboot.backend.model.MediaType;
 import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.User.User;
+import socialmediaspringboot.backend.repository.MediaRepository;
+import socialmediaspringboot.backend.repository.MediaTypeRepository;
 import socialmediaspringboot.backend.repository.PostRepository;
 import socialmediaspringboot.backend.repository.UserRepository;
 
@@ -18,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
+import socialmediaspringboot.backend.service.Media.MediaServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,10 +43,20 @@ public class PostServiceImpl implements PostService{
 
     @Autowired
     private PostMapper postMapper;
+    @Autowired
+    private MediaMapper mediaMapper;
+
+    @Autowired
+    private MediaRepository mediaRepository;
+    @Autowired
+    private MediaTypeRepository mediaTypeRepository;
+    @Autowired
+    private MediaServiceImpl mediaService;
+
 
     @Override
     @Transactional
-    public PostResponseDTO createPost(Long userId, PostDTO postDTO) {
+    public PostResponseDTO createPost(Long userId, PostDTO postDTO, MultipartFile[] files, MediaRequestDTO mediaRequestDTO) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -45,6 +64,40 @@ public class PostServiceImpl implements PostService{
         post.setAuthor(user);
 
         Post savedPost = postRepository.save(post);
+        if (files != null) {
+            int order = 0;
+
+            for (MultipartFile file : files) {
+
+                // 1. Upload file -> lấy DTO chứa secure_url, cloud_id
+                MediaResponseDTO uploaded = mediaService.upload(file, mediaRequestDTO);
+
+                // 2. Tạo Media entity từ MediaRequestDTO
+                MediaRequestDTO req = new MediaRequestDTO();
+                req.setUploadorder(order++);
+                // các trường khác trong mediaRequestDTO nếu bạn có
+
+                Media media = mediaMapper.toMedia(req);
+
+                // 3. Set thêm dữ liệu upload trả về
+                media.setMediaUrl(uploaded.getMediaUrl());
+                media.setCloudId(uploaded.getCloudId());
+
+                // 4. Set user & post
+                media.setUserId(user);
+                media.setPostId(savedPost);
+
+                // 5. Set media type nếu cần (từ upload)
+                if (uploaded.getMediatypeId() != null) {
+                    MediaType type = mediaTypeRepository.findById(uploaded.getMediatypeId())
+                            .orElseThrow(() -> new RuntimeException("Media type not found"));
+                    media.setMediatypeId(type);
+                }
+
+                // 6. Save entity
+                mediaRepository.save(media);
+            }
+        }
         return postMapper.toPostResponseDTO(savedPost);
     }
     @Override

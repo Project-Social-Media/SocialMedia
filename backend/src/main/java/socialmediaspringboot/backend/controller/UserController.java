@@ -3,7 +3,9 @@ package socialmediaspringboot.backend.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import socialmediaspringboot.backend.dto.ApiResponse;
+import socialmediaspringboot.backend.dto.User.ChangePicturePostRequest;
 import socialmediaspringboot.backend.dto.User.UpdateProfileRequest;
 import socialmediaspringboot.backend.dto.User.UserDTO;
 import socialmediaspringboot.backend.dto.User.UserResponseDTO;
@@ -58,6 +60,22 @@ public class UserController {
                 .result(userService.updateUser(request))
                 .build();
     }
+//    @PutMapping("/profile-picture")
+//    public ApiResponse<UserResponseDTO> changeProfilePicture(
+//            @RequestPart("file") MultipartFile file,
+//    @RequestBody ChangePicturePostRequest request) {
+//        return ApiResponse.<UserResponseDTO>builder()
+//                .result(userService.changeProfilePicture(file, request))
+//                .build();
+//    }
+//    @PutMapping("/background-picture")
+//    public ApiResponse<UserResponseDTO> changeBackgroundPicture(
+//            @RequestPart("file") MultipartFile file,
+//    @RequestBody ChangePicturePostRequest request) {
+//        return ApiResponse.<UserResponseDTO>builder()
+//                .result(userService.changeBackgroundPicture(file, request))
+//                .build();
+//    }
 
     @DeleteMapping("/{userId}")
     public ApiResponse<Void> deleteUser(@PathVariable("userId") Long userId){

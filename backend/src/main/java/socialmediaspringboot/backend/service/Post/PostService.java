@@ -1,5 +1,7 @@
 package socialmediaspringboot.backend.service.Post;
 
+import org.springframework.web.multipart.MultipartFile;
+import socialmediaspringboot.backend.dto.Media.MediaRequestDTO;
 import socialmediaspringboot.backend.dto.Post.PostDTO;
 import socialmediaspringboot.backend.dto.Post.PostResponseDTO;
 import socialmediaspringboot.backend.model.Post;
@@ -12,7 +14,7 @@ import java.util.List;
 
 public interface PostService {
 
-    PostResponseDTO createPost(Long userId, PostDTO postDTO);
+    PostResponseDTO createPost(Long userId, PostDTO postDTO, MultipartFile[] files, MediaRequestDTO mediaRequestDTO);
 
     PostResponseDTO updatePost(Long postId, PostDTO postDTO);
 

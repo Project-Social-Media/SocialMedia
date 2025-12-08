@@ -3,7 +3,9 @@ package socialmediaspringboot.backend.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import socialmediaspringboot.backend.dto.ApiResponse;
+import socialmediaspringboot.backend.dto.Media.MediaRequestDTO;
 import socialmediaspringboot.backend.dto.Post.PostDTO;
 import socialmediaspringboot.backend.dto.Post.PostResponseDTO;
 import socialmediaspringboot.backend.model.Post;
@@ -19,8 +21,12 @@ public class PostController {
     PostServiceImpl postService;
 
     @PostMapping("/user/{userId}")
-    public ApiResponse<PostResponseDTO> createPost(@PathVariable Long userId, @RequestBody @Valid PostDTO postDTO){
-        PostResponseDTO createdPost = postService.createPost(userId,postDTO);
+    public ApiResponse<PostResponseDTO> createPost(@PathVariable Long userId,
+                                                   @RequestPart("post") @Valid PostDTO postDTO,
+                                                   @RequestPart(value = "file", required = false) MultipartFile[] files,
+                                                   @RequestPart(value = "media", required = false)MediaRequestDTO mediaRequestDTO
+                                                   ){
+        PostResponseDTO createdPost = postService.createPost(userId,postDTO, files, mediaRequestDTO);
         return ApiResponse.<PostResponseDTO>builder()
                 .result(createdPost)
                 .message("Create Post successfully")

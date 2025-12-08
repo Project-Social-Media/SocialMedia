@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.joda.time.DateTime;
 import socialmediaspringboot.backend.model.Gender;
+import socialmediaspringboot.backend.model.Media;
 import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.Role;
 
@@ -42,6 +43,15 @@ public class User {
 
     @Column(name = "birthdate")
     private Date birth;
+
+    @OneToOne
+    @JoinColumn(name = "profilePictureId")
+    private Media profilePicture;
+
+
+    @OneToOne
+    @JoinColumn(name = "backgroundPictureId")
+    private Media backgroundPicture;
 
     @Column(name = "createdAt")
     private LocalDateTime createdAt;

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import socialmediaspringboot.backend.model.Gender;
+import socialmediaspringboot.backend.model.Media;
 import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.Role;
 
@@ -26,6 +27,8 @@ public class UserResponseDTO {
     private String lastname;
     private Gender gender;
     private Date birth;
+    private Media profilePicture;
+    private Media backgroundPicture;
     private LocalDateTime createdAt;
     Set<Role> roles;
     private List<Post> posts = new ArrayList<>();

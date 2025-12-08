@@ -11,7 +11,6 @@ import socialmediaspringboot.backend.model.Post;
 public interface PostMapper {
     @Mapping(target = "postId", ignore = true)
     @Mapping(target = "author", ignore = true)
-    //@Mapping(target = "privacy", ignore = true)
     @Mapping(target = "originalPost", ignore = true)
     @Mapping(target = "shareCount", ignore = true)
     @Mapping(target = "createdAt", ignore = true)

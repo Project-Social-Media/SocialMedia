@@ -1,6 +1,7 @@
 package socialmediaspringboot.backend.service.User;
 
 import org.springframework.data.domain.Page;
+import socialmediaspringboot.backend.dto.User.ChangePicturePostRequest;
 import socialmediaspringboot.backend.dto.User.UpdateProfileRequest;
 import socialmediaspringboot.backend.dto.User.UserDTO;
 import socialmediaspringboot.backend.dto.User.UserResponseDTO;
@@ -15,5 +16,8 @@ public interface UserService {
     UserResponseDTO getMyInfo();
     Page<User>getUsersInPage(int pageNumber, int pageSize);
     UserResponseDTO updateUser(UpdateProfileRequest request);
+//    UserResponseDTO changeProfilePicture(Long mediaId, ChangePicturePostRequest request);
+//    UserResponseDTO changeBackgroundPicture(Long mediaId, ChangePicturePostRequest request);
+
     void deleteUser(Long id);
 }

@@ -61,10 +61,15 @@ CREATE TABLE users (
     lastname NVARCHAR(50) NOT NULL,
     birthdate DATE,
     genderId INT,
+    profilePictureId BIGINT NULL
+    backgroundPictureId BIGINT NULL,
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE(),
     isOnline BIT NOT NULL DEFAULT 0,
 
     CONSTRAINT FK_User_Gender FOREIGN KEY (genderId) REFERENCES gender(genderId)
+    CONSTRAINT FK_User_ProfilePicture FOREIGN KEY (profilePictureId) REFERENCES media(mediaId)
+    CONSTRAINT FK_User_BackgroundPicture FOREIGN KEY (backgroundPictureId) REFERENCES media(mediaId)
+
 );
 
 CREATE TABLE friendRequest (
