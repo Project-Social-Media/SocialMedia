@@ -77,6 +77,7 @@ public class PostServiceImpl implements PostService{
                 Media media = mediaMapper.toMedia(req);
 
                 media.setMediaUrl(uploaded.getMediaUrl());
+                media.setMediaSize(uploaded.getMediaSize());
                 media.setCloudId(uploaded.getCloudId());
 
                 media.setUserId(user);

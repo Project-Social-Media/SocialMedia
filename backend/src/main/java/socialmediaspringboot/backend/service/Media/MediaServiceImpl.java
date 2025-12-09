@@ -63,6 +63,7 @@ public class MediaServiceImpl implements MediaService {
 
             //set entity properties
             media.setMediaUrl((String) data.get("secure_url"));
+            media.setMediaSize((long) data.get("bytes") * 1024 *1024);
             if(allowedImgType.contains(extension)){
                 MediaType imgType = mediaTypeRepository.findById(1)
                         .orElseThrow(()-> new RuntimeException("Media Type not found"));
