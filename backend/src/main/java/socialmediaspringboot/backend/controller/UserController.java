@@ -60,22 +60,25 @@ public class UserController {
                 .result(userService.updateUser(request))
                 .build();
     }
-//    @PutMapping("/profile-picture")
-//    public ApiResponse<UserResponseDTO> changeProfilePicture(
-//            @RequestPart("file") MultipartFile file,
-//    @RequestBody ChangePicturePostRequest request) {
-//        return ApiResponse.<UserResponseDTO>builder()
-//                .result(userService.changeProfilePicture(file, request))
-//                .build();
-//    }
-//    @PutMapping("/background-picture")
-//    public ApiResponse<UserResponseDTO> changeBackgroundPicture(
-//            @RequestPart("file") MultipartFile file,
-//    @RequestBody ChangePicturePostRequest request) {
-//        return ApiResponse.<UserResponseDTO>builder()
-//                .result(userService.changeBackgroundPicture(file, request))
-//                .build();
-//    }
+    @PutMapping("/profile-picture")
+    public ApiResponse<UserResponseDTO> changeProfilePicture(
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("data") ChangePicturePostRequest request
+    ) {
+        return ApiResponse.<UserResponseDTO>builder()
+                .result(userService.changeProfilePicture(file, request))
+                .build();
+    }
+    @PutMapping("/background-picture")
+    public ApiResponse<UserResponseDTO> changeBackgroundPicture(
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("data") ChangePicturePostRequest request
+    ) {
+        return ApiResponse.<UserResponseDTO>builder()
+                .result(userService.changeBackgroundPicture(file, request))
+                .build();
+    }
+
 
     @DeleteMapping("/{userId}")
     public ApiResponse<Void> deleteUser(@PathVariable("userId") Long userId){

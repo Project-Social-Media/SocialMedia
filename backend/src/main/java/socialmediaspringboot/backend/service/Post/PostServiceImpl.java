@@ -1,7 +1,7 @@
 package socialmediaspringboot.backend.service.Post;
 
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,32 +69,25 @@ public class PostServiceImpl implements PostService{
 
             for (MultipartFile file : files) {
 
-                // 1. Upload file -> lấy DTO chứa secure_url, cloud_id
                 MediaResponseDTO uploaded = mediaService.upload(file, mediaRequestDTO);
 
-                // 2. Tạo Media entity từ MediaRequestDTO
                 MediaRequestDTO req = new MediaRequestDTO();
                 req.setUploadorder(order++);
-                // các trường khác trong mediaRequestDTO nếu bạn có
 
                 Media media = mediaMapper.toMedia(req);
 
-                // 3. Set thêm dữ liệu upload trả về
                 media.setMediaUrl(uploaded.getMediaUrl());
                 media.setCloudId(uploaded.getCloudId());
 
-                // 4. Set user & post
                 media.setUserId(user);
                 media.setPostId(savedPost);
 
-                // 5. Set media type nếu cần (từ upload)
                 if (uploaded.getMediatypeId() != null) {
                     MediaType type = mediaTypeRepository.findById(uploaded.getMediatypeId())
                             .orElseThrow(() -> new RuntimeException("Media type not found"));
                     media.setMediatypeId(type);
                 }
 
-                // 6. Save entity
                 mediaRepository.save(media);
             }
         }
