@@ -196,7 +196,7 @@ public class UserServiceImpl implements UserService{
         postDTO.setPrivacy(privacy);
 
         // Gọi createPost
-        PostResponseDTO created = postService.createPost(user.getUserId(), postDTO, null, null);
+        PostResponseDTO created = postService.createPost(user.getUserId(), postDTO, null );
 
         // Sau tạo post → update media vào post
         avatar.setPostId(postRepository.findById(created.getPostId()).orElseThrow());
@@ -257,7 +257,7 @@ public class UserServiceImpl implements UserService{
         );
         postDTO.setPrivacy(privacy);
 
-        PostResponseDTO created = postService.createPost(user.getUserId(), postDTO, null, null);
+        PostResponseDTO created = postService.createPost(user.getUserId(), postDTO, null);
 
         // Gắn media vào post
         background.setPostId(postRepository.findById(created.getPostId()).orElseThrow());
