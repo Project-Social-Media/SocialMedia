@@ -2,6 +2,7 @@ package socialmediaspringboot.backend.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import socialmediaspringboot.backend.dto.ApiResponse;
@@ -20,7 +21,7 @@ public class PostController {
     @Autowired
     PostServiceImpl postService;
 
-    @PostMapping("/user/{userId}")
+    @PostMapping(value="/user/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<PostResponseDTO> createPost(@PathVariable Long userId,
                                                    @RequestPart("post") @Valid PostDTO postDTO,
                                                    @RequestPart(value = "file", required = false) MultipartFile[] files,

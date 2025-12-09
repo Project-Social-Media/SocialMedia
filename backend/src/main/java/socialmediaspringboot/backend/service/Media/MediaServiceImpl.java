@@ -74,7 +74,6 @@ public class MediaServiceImpl implements MediaService {
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
             Long userId = user.getUserId();
             media.setUserId(user);
-            media.setPostId(request.getPostId());
             media.setCloudId((String) data.get("public_id"));
             media.setCreatedAt(LocalDateTime.now());
             Media saved = mediaRepository.save(media);
