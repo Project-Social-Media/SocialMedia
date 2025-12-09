@@ -180,7 +180,7 @@ WHERE postId IS NULL;
 CREATE TABLE media (
     mediaId BIGINT IDENTITY(1,1) PRIMARY KEY,
     mediaUrl NVARCHAR(500) NOT NULL,
-    mediaSize INT NOT NULL,
+    mediaSize BIGINT NOT NULL,
     mediatypeId INT NOT NULL,
     uploadorder INT NOT NULL DEFAULT 0,
     cloudId NVARCHAR(255) NOT NULL,

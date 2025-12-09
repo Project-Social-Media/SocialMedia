@@ -24,6 +24,9 @@ public class Media {
     @Column(name = "mediaUrl") // <-- Thêm @Column cho rõ ràng
     private String mediaUrl;
 
+    @Column(name = "mediaSize") // <-- Thêm @Column cho rõ ràng
+    private Long mediaSize;
+
     @ManyToOne
     @JoinColumn(name = "mediatypeId")
     private MediaType mediatypeId;

@@ -18,6 +18,7 @@ public class MediaResponseDTO {
     private Long mediaId;
     private String mediaUrl;
     private Integer mediatypeId;
+    private Long mediaSize;
     private int uploadorder;
     private String cloudId;
     private Long userId;

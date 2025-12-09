@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class MediaRequestDTO {
     private String mediaUrl;
     private MediaType mediatypeId;
+    private Long mediaSize;
     private int uploadorder;
     private String cloudId;
     private User userId;

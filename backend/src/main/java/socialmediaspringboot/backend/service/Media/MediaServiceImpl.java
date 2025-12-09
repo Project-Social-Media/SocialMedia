@@ -40,6 +40,12 @@ public class MediaServiceImpl implements MediaService {
     public MediaResponseDTO upload(MultipartFile file, MediaRequestDTO request){
         Media media = new Media();
         try{
+            //logic to check file size and throw an error if file is bigger than 25MB
+            long fileSize = file.getSize();
+            long maxSize = 25 * 1024 * 1024;
+            if(fileSize > maxSize){
+                throw new RuntimeException("Can only upload files not bigger than 25MB"); // this needs to be assigned a unique code in global exception handler
+            }
             //logic to check file type/extension and assign mediaType
             String fileName = file.getOriginalFilename();
             String extension = "";
