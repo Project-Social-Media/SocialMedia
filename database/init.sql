@@ -61,14 +61,14 @@ CREATE TABLE users (
     lastname NVARCHAR(50) NOT NULL,
     birthdate DATE,
     genderId INT,
-    profilePictureId BIGINT NULL
+    profilePictureId BIGINT NULL,
     backgroundPictureId BIGINT NULL,
     createdAt DATETIME2 NOT NULL DEFAULT GETDATE(),
     isOnline BIT NOT NULL DEFAULT 0,
 
-    CONSTRAINT FK_User_Gender FOREIGN KEY (genderId) REFERENCES gender(genderId)
-    CONSTRAINT FK_User_ProfilePicture FOREIGN KEY (profilePictureId) REFERENCES media(mediaId)
-    CONSTRAINT FK_User_BackgroundPicture FOREIGN KEY (backgroundPictureId) REFERENCES media(mediaId)
+    CONSTRAINT FK_User_Gender FOREIGN KEY (genderId) REFERENCES gender(genderId),
+--    CONSTRAINT FK_User_ProfilePicture FOREIGN KEY (profilePictureId) REFERENCES media(mediaId),
+--    CONSTRAINT FK_User_BackgroundPicture FOREIGN KEY (backgroundPictureId) REFERENCES media(mediaId)
 
 );
 
@@ -197,6 +197,11 @@ CREATE TABLE media (
         (postId IS NOT NULL AND commentId IS NULL) OR (postId IS NULL AND commentId IS NOT NULL)
     )
 );
+
+ALTER TABLE users
+ADD
+    CONSTRAINT FK_User_ProfilePicture FOREIGN KEY (profilePictureId) REFERENCES media(mediaId),
+    CONSTRAINT FK_User_BackgroundPicture FOREIGN KEY (backgroundPictureId) REFERENCES media(mediaId);
 
 CREATE TABLE message (
     messageId BIGINT IDENTITY(1,1) PRIMARY KEY,
