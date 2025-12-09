@@ -24,10 +24,9 @@ public class PostController {
     @PostMapping(value="/user/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<PostResponseDTO> createPost(@PathVariable Long userId,
                                                    @RequestPart("post") @Valid PostDTO postDTO,
-                                                   @RequestPart(value = "file", required = false) MultipartFile[] files,
-                                                   @RequestPart(value = "media", required = false)MediaRequestDTO mediaRequestDTO
+                                                   @RequestPart(value = "file", required = false) MultipartFile[] files
                                                    ){
-        PostResponseDTO createdPost = postService.createPost(userId,postDTO, files, mediaRequestDTO);
+        PostResponseDTO createdPost = postService.createPost(userId,postDTO, files);
         return ApiResponse.<PostResponseDTO>builder()
                 .result(createdPost)
                 .message("Create Post successfully")

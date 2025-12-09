@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface PostService {
 
-    PostResponseDTO createPost(Long userId, PostDTO postDTO, MultipartFile[] files, MediaRequestDTO mediaRequestDTO);
+    PostResponseDTO createPost(Long userId, PostDTO postDTO, MultipartFile[] files);
 
     PostResponseDTO updatePost(Long postId, PostDTO postDTO);
 

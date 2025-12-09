@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     @Transactional
-    public PostResponseDTO createPost(Long userId, PostDTO postDTO, MultipartFile[] files, MediaRequestDTO mediaRequestDTO) {
+    public PostResponseDTO createPost(Long userId, PostDTO postDTO, MultipartFile[] files) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -69,10 +69,10 @@ public class PostServiceImpl implements PostService{
 
             for (MultipartFile file : files) {
 
-                MediaResponseDTO uploaded = mediaService.upload(file, mediaRequestDTO);
-
                 MediaRequestDTO req = new MediaRequestDTO();
                 req.setUploadorder(order++);
+
+                MediaResponseDTO uploaded = mediaService.upload(file, req);
 
                 Media media = mediaMapper.toMedia(req);
 
