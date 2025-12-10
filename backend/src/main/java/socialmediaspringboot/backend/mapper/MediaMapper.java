@@ -11,6 +11,8 @@ import socialmediaspringboot.backend.model.Media;
 @Mapper(componentModel = "spring")
 public interface MediaMapper {
     @Mapping(target = "mediaId", ignore = true)
+    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "postId", ignore = true)
     Media toMedia(MediaRequestDTO request);
 
     @Mapping(target = "mediaId", ignore = false)

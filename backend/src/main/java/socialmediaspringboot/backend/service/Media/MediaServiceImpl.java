@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import socialmediaspringboot.backend.dto.Media.MediaRequestDTO;
 import socialmediaspringboot.backend.dto.Media.MediaResponseDTO;
+import socialmediaspringboot.backend.dto.Post.PostResponseDTO;
 import socialmediaspringboot.backend.exception.AppException;
 import socialmediaspringboot.backend.exception.ErrorCode;
 import socialmediaspringboot.backend.mapper.MediaMapper;
 import socialmediaspringboot.backend.model.Media;
 import socialmediaspringboot.backend.model.MediaType;
+import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.User.User;
 import socialmediaspringboot.backend.repository.MediaRepository;
 import socialmediaspringboot.backend.repository.MediaTypeRepository;
@@ -63,7 +65,9 @@ public class MediaServiceImpl implements MediaService {
 
             //set entity properties
             media.setMediaUrl((String) data.get("secure_url"));
-            media.setMediaSize((long) data.get("bytes") * 1024 *1024);
+
+            Number sizeInBytes = (Number) data.get("bytes");
+            media.setMediaSize(sizeInBytes.longValue());
             if(allowedImgType.contains(extension)){
                 MediaType imgType = mediaTypeRepository.findById(1)
                         .orElseThrow(()-> new RuntimeException("Media Type not found"));
@@ -83,10 +87,15 @@ public class MediaServiceImpl implements MediaService {
             media.setUserId(user);
             media.setCloudId((String) data.get("public_id"));
             media.setCreatedAt(LocalDateTime.now());
-            Media saved = mediaRepository.save(media);
-            return mediaMapper.toMediaResponseDTO(saved);
+            return mediaMapper.toMediaResponseDTO(media);
         }catch(IOException io){
             throw new RuntimeException("Media upload fail.");
         }
+    }
+
+    public MediaResponseDTO getMediaById(Long mediaId) {
+        Media media =  mediaRepository.findById(mediaId)
+                .orElseThrow(() -> new RuntimeException("Media not found"));
+        return mediaMapper.toMediaResponseDTO(media);
     }
 }

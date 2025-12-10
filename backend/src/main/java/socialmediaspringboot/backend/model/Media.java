@@ -1,6 +1,7 @@
 package socialmediaspringboot.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import socialmediaspringboot.backend.model.User.User;
@@ -39,6 +40,7 @@ public class Media {
 
     @ManyToOne
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private User userId;
 
     @ManyToOne

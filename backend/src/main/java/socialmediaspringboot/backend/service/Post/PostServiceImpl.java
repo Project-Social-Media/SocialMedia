@@ -89,6 +89,8 @@ public class PostServiceImpl implements PostService{
                     media.setMediatypeId(type);
                 }
 
+                media.setCreatedAt(uploaded.getCreatedAt());
+
                 mediaRepository.save(media);
             }
         }
