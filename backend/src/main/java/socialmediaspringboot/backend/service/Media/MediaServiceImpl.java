@@ -1,6 +1,9 @@
 package socialmediaspringboot.backend.service.Media;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import io.netty.util.internal.ObjectUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -93,9 +96,43 @@ public class MediaServiceImpl implements MediaService {
         }
     }
 
+    @Override
     public MediaResponseDTO getMediaById(Long mediaId) {
         Media media =  mediaRepository.findById(mediaId)
                 .orElseThrow(() -> new RuntimeException("Media not found"));
         return mediaMapper.toMediaResponseDTO(media);
+    }
+
+    private String resolveResourceType(MediaType mediaType) {
+        return switch (mediaType.getMediaTypeId().intValue()) {
+            case 1 -> "image";
+            case 2 -> "video";
+            default -> throw new AppException(ErrorCode.MEDIA_TYPE_NOT_FOUND);
+        };
+    }
+
+    @Override
+    public void deleteMedia(List<Long> mediaIds){
+        List<Media>  mediaList = mediaRepository.findAllById(mediaIds);
+        if(mediaList.size() != mediaIds.size()){
+            throw new AppException(ErrorCode.MEDIA_NOT_FOUND);
+        }
+        for(Media media: mediaList){
+            String resourceType = resolveResourceType(media.getMediatypeId());
+            Map result;
+            try{
+                result = this.cloudinary.uploader().destroy(
+                        media.getCloudId(),
+                        ObjectUtils.asMap("resource_type", resourceType)
+                );
+
+            }catch(IOException io){
+                throw new RuntimeException("Media delete fail.");
+            }
+            if(!"ok".equals(result.get("result"))){
+                throw new RuntimeException("Delete media failed.");
+            }
+        }
+        mediaRepository.deleteAll(mediaList);
     }
 }
