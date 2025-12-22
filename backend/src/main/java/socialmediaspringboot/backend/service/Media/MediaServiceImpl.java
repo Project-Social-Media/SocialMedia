@@ -1,6 +1,9 @@
 package socialmediaspringboot.backend.service.Media;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import io.netty.util.internal.ObjectUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,11 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import socialmediaspringboot.backend.dto.Media.MediaRequestDTO;
 import socialmediaspringboot.backend.dto.Media.MediaResponseDTO;
+import socialmediaspringboot.backend.dto.Post.PostResponseDTO;
 import socialmediaspringboot.backend.exception.AppException;
 import socialmediaspringboot.backend.exception.ErrorCode;
 import socialmediaspringboot.backend.mapper.MediaMapper;
 import socialmediaspringboot.backend.model.Media;
 import socialmediaspringboot.backend.model.MediaType;
+import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.User.User;
 import socialmediaspringboot.backend.repository.MediaRepository;
 import socialmediaspringboot.backend.repository.MediaTypeRepository;
@@ -63,7 +68,9 @@ public class MediaServiceImpl implements MediaService {
 
             //set entity properties
             media.setMediaUrl((String) data.get("secure_url"));
-            media.setMediaSize((long) data.get("bytes") * 1024 *1024);
+
+            Number sizeInBytes = (Number) data.get("bytes");
+            media.setMediaSize(sizeInBytes.longValue());
             if(allowedImgType.contains(extension)){
                 MediaType imgType = mediaTypeRepository.findById(1)
                         .orElseThrow(()-> new RuntimeException("Media Type not found"));
@@ -83,10 +90,49 @@ public class MediaServiceImpl implements MediaService {
             media.setUserId(user);
             media.setCloudId((String) data.get("public_id"));
             media.setCreatedAt(LocalDateTime.now());
-            Media saved = mediaRepository.save(media);
-            return mediaMapper.toMediaResponseDTO(saved);
+            return mediaMapper.toMediaResponseDTO(media);
         }catch(IOException io){
             throw new RuntimeException("Media upload fail.");
         }
+    }
+
+    @Override
+    public MediaResponseDTO getMediaById(Long mediaId) {
+        Media media =  mediaRepository.findById(mediaId)
+                .orElseThrow(() -> new RuntimeException("Media not found"));
+        return mediaMapper.toMediaResponseDTO(media);
+    }
+
+    private String resolveResourceType(MediaType mediaType) {
+        return switch (mediaType.getMediaTypeId().intValue()) {
+            case 1 -> "image";
+            case 2 -> "video";
+            default -> throw new AppException(ErrorCode.MEDIA_TYPE_NOT_FOUND);
+        };
+    }
+
+    @Override
+    public void deleteMedia(List<Long> mediaIds){
+        List<Media>  mediaList = mediaRepository.findAllById(mediaIds);
+        if(mediaList.size() != mediaIds.size()){
+            throw new AppException(ErrorCode.MEDIA_NOT_FOUND);
+        }
+        for(Media media: mediaList){
+            String resourceType = resolveResourceType(media.getMediatypeId());
+            Map result;
+            try{
+                result = this.cloudinary.uploader().destroy(
+                        media.getCloudId(),
+                        ObjectUtils.asMap("resource_type", resourceType)
+                );
+
+            }catch(IOException io){
+                throw new RuntimeException("Media delete fail.");
+            }
+            if(!"ok".equals(result.get("result"))){
+                throw new RuntimeException("Delete media failed.");
+            }
+        }
+        mediaRepository.deleteAll(mediaList);
     }
 }

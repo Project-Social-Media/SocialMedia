@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import socialmediaspringboot.backend.model.Comment;
 import socialmediaspringboot.backend.model.MediaType;
 import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.User.User;
@@ -23,7 +24,7 @@ public class MediaResponseDTO {
     private String cloudId;
     private Long userId;
     private Long postId;
-    //    private Comment commentId;
+    private Comment commentId;
     private LocalDateTime createdAt;
 
 }

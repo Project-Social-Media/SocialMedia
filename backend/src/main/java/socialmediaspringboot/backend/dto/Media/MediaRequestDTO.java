@@ -20,8 +20,8 @@ public class MediaRequestDTO {
     private Long mediaSize;
     private int uploadorder;
     private String cloudId;
-    private User userId;
-    private Post postId;
+    private Long userId;
+    private Long postId;
 //    private Comment commentId;
     private LocalDateTime createdAt;
 }

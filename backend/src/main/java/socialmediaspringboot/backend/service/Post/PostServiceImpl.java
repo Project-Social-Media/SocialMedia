@@ -10,6 +10,8 @@ import socialmediaspringboot.backend.dto.Media.MediaRequestDTO;
 import socialmediaspringboot.backend.dto.Media.MediaResponseDTO;
 import socialmediaspringboot.backend.dto.Post.PostDTO;
 import socialmediaspringboot.backend.dto.Post.PostResponseDTO;
+import socialmediaspringboot.backend.exception.AppException;
+import socialmediaspringboot.backend.exception.ErrorCode;
 import socialmediaspringboot.backend.mapper.MediaMapper;
 import socialmediaspringboot.backend.mapper.PostMapper;
 import socialmediaspringboot.backend.model.Media;
@@ -58,7 +60,7 @@ public class PostServiceImpl implements PostService{
     @Transactional
     public PostResponseDTO createPost(Long userId, PostDTO postDTO, MultipartFile[] files) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Post post = postMapper.toPost(postDTO);
         post.setAuthor(user);
@@ -89,7 +91,10 @@ public class PostServiceImpl implements PostService{
                     media.setMediatypeId(type);
                 }
 
+                media.setCreatedAt(uploaded.getCreatedAt());
+
                 mediaRepository.save(media);
+                savedPost.getMediaList().add(media);
             }
         }
         return postMapper.toPostResponseDTO(savedPost);

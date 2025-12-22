@@ -1,6 +1,7 @@
 package socialmediaspringboot.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import socialmediaspringboot.backend.model.User.User;
@@ -39,16 +40,18 @@ public class Media {
 
     @ManyToOne
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private User userId;
 
     @ManyToOne
     @JoinColumn(name = "postId")
-    @JsonBackReference
+    @JsonBackReference("post-media") //child reference
     private Post postId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "commentId")
-//    private Comment commentId;
+    @ManyToOne
+    @JsonBackReference("comment-media") //child reference
+    @JoinColumn(name = "commentId")
+    private Comment commentId;
 
     @Column(name = "createdAt")
     private LocalDateTime createdAt;

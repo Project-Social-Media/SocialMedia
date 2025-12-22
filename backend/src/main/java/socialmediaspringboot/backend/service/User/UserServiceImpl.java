@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService{
         MediaRequestDTO mediaReq = new MediaRequestDTO();
         mediaReq.setUploadorder(0);
         mediaReq.setPostId(null); // Upload avatar → chưa gắn post
-        mediaReq.setUserId(user);
+        mediaReq.setUserId(user.getUserId());
 
         MediaResponseDTO uploaded = mediaService.upload(file, mediaReq);
 
@@ -222,7 +222,7 @@ public class UserServiceImpl implements UserService{
         MediaRequestDTO mediaReq = new MediaRequestDTO();
         mediaReq.setUploadorder(0);
         mediaReq.setPostId(null);
-        mediaReq.setUserId(user);
+        mediaReq.setUserId(user.getUserId());
 
         MediaResponseDTO uploaded = mediaService.upload(file, mediaReq);
 
