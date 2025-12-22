@@ -45,12 +45,13 @@ public class Media {
 
     @ManyToOne
     @JoinColumn(name = "postId")
-    @JsonBackReference
+    @JsonBackReference("post-media") //child reference
     private Post postId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "commentId")
-//    private Comment commentId;
+    @ManyToOne
+    @JsonBackReference("comment-media") //child reference
+    @JoinColumn(name = "commentId")
+    private Comment commentId;
 
     @Column(name = "createdAt")
     private LocalDateTime createdAt;

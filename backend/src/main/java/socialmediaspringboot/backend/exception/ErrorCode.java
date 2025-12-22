@@ -22,7 +22,13 @@ public enum ErrorCode {
     UNAUTHENTICATED(105, "Unauthenticated.",
             HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED_ACCESS(106, "You do not have the permission to access this page.",
-            HttpStatus.FORBIDDEN)
+            HttpStatus.FORBIDDEN),
+    COMMENT_NOT_FOUND(107, "Comment not found.",
+            HttpStatus.NOT_FOUND),
+    MEDIA_NOT_FOUND(108, "Media not found.",
+            HttpStatus.NOT_FOUND),
+    MEDIA_TYPE_NOT_FOUND(109, "Media type unsupported.",
+            HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode){

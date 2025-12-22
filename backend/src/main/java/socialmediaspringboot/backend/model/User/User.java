@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.joda.time.DateTime;
-import socialmediaspringboot.backend.model.Gender;
-import socialmediaspringboot.backend.model.Media;
-import socialmediaspringboot.backend.model.Post;
-import socialmediaspringboot.backend.model.Role;
+import socialmediaspringboot.backend.model.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -64,8 +61,13 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @JsonManagedReference // parent reference
+    @JsonManagedReference("user-post") // parent reference
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = false)
     @Column(nullable = true)
     private List<Post> posts = new ArrayList<>();
+
+    @JsonManagedReference("user-comment") // parent reference
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = false)
+    @Column(nullable = true)
+    private List<Comment> comments = new ArrayList<>();
 }

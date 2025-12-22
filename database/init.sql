@@ -192,7 +192,7 @@ CREATE TABLE media (
     CONSTRAINT FK_Media_Type FOREIGN KEY (mediatypeId) REFERENCES mediaType(mediaTypeId),
     CONSTRAINT FK_Media_User FOREIGN KEY (userId) REFERENCES users(userId),
     CONSTRAINT FK_Media_Post FOREIGN KEY (postId) REFERENCES post(postId) ON DELETE CASCADE,
-    CONSTRAINT FK_Media_Comment FOREIGN KEY (commentId) REFERENCES  comment(commentId),
+    CONSTRAINT FK_Media_Comment FOREIGN KEY (commentId) REFERENCES  comment(commentId) ,
     CONSTRAINT CHK_Media_Target CHECK (
         (postId IS NOT NULL AND commentId IS NULL) OR (postId IS NULL AND commentId IS NOT NULL)
     )

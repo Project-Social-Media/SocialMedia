@@ -28,7 +28,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "authorId", nullable = false)
-    @JsonBackReference // child reference
+    @JsonBackReference("user-post") // child reference
     private User author;
 
     @Column(columnDefinition = "NVARCHAR(MAX)")
@@ -59,8 +59,13 @@ public class Post {
         this.createdAt = LocalDateTime.now(); // set khi tạo
     }
 
-    @JsonManagedReference // parent reference
+    @JsonManagedReference("post-media") // parent reference
     @OneToMany(mappedBy = "postId", cascade = CascadeType.ALL, orphanRemoval = false)
     @Column(nullable = true)
     private List<Media> mediaList = new ArrayList<>();
+
+    @JsonManagedReference("post-comment") // parent reference
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = false)
+    @Column(nullable = true)
+    private List<Comment> commentList = new ArrayList<>();
 }
