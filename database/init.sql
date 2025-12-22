@@ -20,6 +20,10 @@ CREATE TABLE privacy (
     privacyName NVARCHAR(50) NOT NULL UNIQUE,
     privacyDescription NVARCHAR(100)
 );
+CREATE TABLE friendshipType (
+    friendshipTypeId INT PRIMARY KEY,
+    friendshipTypeName NVARCHAR(50) NOT NULL UNIQUE
+);
 
 CREATE TABLE friendRequestStatus (
     statusId INT PRIMARY KEY,
@@ -32,6 +36,7 @@ CREATE TABLE reactionType (
     typeName NVARCHAR(50) NOT NULL UNIQUE,
     iconUrl NVARCHAR(255)
 );
+
 
 CREATE TABLE mediaType (
     mediaTypeId INT PRIMARY KEY,
@@ -70,6 +75,18 @@ CREATE TABLE users (
 --    CONSTRAINT FK_User_ProfilePicture FOREIGN KEY (profilePictureId) REFERENCES media(mediaId),
 --    CONSTRAINT FK_User_BackgroundPicture FOREIGN KEY (backgroundPictureId) REFERENCES media(mediaId)
 
+);
+CREATE TABLE friendship (
+    friendshipId BIGINT IDENTITY(1,1) PRIMARY KEY,
+    userId BIGINT NOT NULL,
+    friendId BIGINT NOT NULL,
+    friendshipTypeId INT NOT NULL,
+    createdAt DATETIME2 DEFAULT GETDATE(),
+
+    CONSTRAINT FK_Friendship_User FOREIGN KEY (userId) REFERENCES users(userId),
+    CONSTRAINT FK_Friendship_Friend FOREIGN KEY (friendId) REFERENCES users(userId),
+    CONSTRAINT FK_Friendship_Type FOREIGN KEY (friendshipTypeId) REFERENCES friendshipType(friendshipTypeId),
+    CONSTRAINT UQ_Friendship UNIQUE (userId, friendId)
 );
 
 CREATE TABLE friendRequest (
@@ -265,6 +282,8 @@ INSERT INTO gender (genderId, genderName) VALUES
 
 INSERT INTO roles (roleId, roleName) VALUES
 (1, 'USER'), (2, 'ADMIN');
+INSERT INTO friendshipType (friendshipTypeId, friendshipTypeName) VALUES
+(1, 'Not_Friend'), (2, 'Friend');
 
 GO
 PRINT 'Database schema created successfully!';

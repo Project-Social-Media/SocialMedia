@@ -191,7 +191,7 @@ public class UserServiceImpl implements UserService{
         postDTO.setContent(
                 request.getContent() != null
                         ? request.getContent()
-                        : user.getFirstname() + " đã cập nhật ảnh đại diện."
+                        : user.getFirstname() + " updated profile picture."
         );
         postDTO.setPrivacy(privacy);
 
@@ -253,7 +253,7 @@ public class UserServiceImpl implements UserService{
         postDTO.setContent(
                 request.getContent() != null
                         ? request.getContent()
-                        : user.getFirstname() + " đã cập nhật ảnh bìa."
+                        : user.getFirstname() + " updated background picture."
         );
         postDTO.setPrivacy(privacy);
 
