@@ -1,2 +1,14 @@
-package socialmediaspringboot.backend.dto.FriendRequestDTO;public class FriendRequestCreateRequestDTO {
+package socialmediaspringboot.backend.dto.FriendRequestDTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class FriendRequestCreateRequestDTO {
+    private Long receiverId;
 }

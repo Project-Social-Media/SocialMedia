@@ -11,33 +11,33 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "friendRequest",
+        name = "friendship",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"senderId", "receiverId"})
+                @UniqueConstraint(columnNames = {"userId", "friendId"})
         }
 )
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FriendRequest {
+public class FriendShip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "friendRequestId")
-    private Long friendRequestId;
+    private Long friendshipId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "senderId", nullable = false)
-    private User sender;
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiverId", nullable = false)
-    private User receiver;
+    @JoinColumn(name = "friendId", nullable = false)
+    private User friend;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "statusId", nullable = false)
-    private FriendRequestStatus status;
+    @JoinColumn(name = "friendshipTypeId", nullable = false)
+    private FriendShipType friendshipType;
 
-    @Column(name = "createdAt", nullable = false)
     private LocalDateTime createdAt;
+
+
 }
