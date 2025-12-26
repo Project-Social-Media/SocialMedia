@@ -46,7 +46,7 @@ public class Media {
     @ManyToOne
     @JoinColumn(name = "postId")
     @JsonBackReference("post-media") //child reference
-    private Post postId;
+    private Post post;
 
     @ManyToOne
     @JsonBackReference("comment-media") //child reference

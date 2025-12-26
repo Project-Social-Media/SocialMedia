@@ -60,7 +60,7 @@ public class Post {
     }
 
     @JsonManagedReference("post-media") // parent reference
-    @OneToMany(mappedBy = "postId", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = false)
     @Column(nullable = true)
     private List<Media> mediaList = new ArrayList<>();
 

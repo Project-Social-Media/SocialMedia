@@ -31,6 +31,7 @@ import org.springframework.data.domain.Page;
 import socialmediaspringboot.backend.service.Media.MediaServiceImpl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,7 @@ public class PostServiceImpl implements PostService{
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Post post = postMapper.toPost(postDTO);
+        post.setMediaList(new ArrayList<>());
         post.setAuthor(user);
 
         Post savedPost = postRepository.save(post);
@@ -83,7 +85,7 @@ public class PostServiceImpl implements PostService{
                 media.setCloudId(uploaded.getCloudId());
 
                 media.setUserId(user);
-                media.setPostId(savedPost);
+                media.setPost(savedPost);
 
                 if (uploaded.getMediatypeId() != null) {
                     MediaType type = mediaTypeRepository.findById(uploaded.getMediatypeId())

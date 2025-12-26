@@ -199,7 +199,7 @@ public class UserServiceImpl implements UserService{
         PostResponseDTO created = postService.createPost(user.getUserId(), postDTO, null );
 
         // Sau tạo post → update media vào post
-        avatar.setPostId(postRepository.findById(created.getPostId()).orElseThrow());
+        avatar.setPost(postRepository.findById(created.getPostId()).orElseThrow());
         mediaRepository.save(avatar);
 
         return userMapper.toUserResponseDTO(user);
@@ -260,7 +260,7 @@ public class UserServiceImpl implements UserService{
         PostResponseDTO created = postService.createPost(user.getUserId(), postDTO, null);
 
         // Gắn media vào post
-        background.setPostId(postRepository.findById(created.getPostId()).orElseThrow());
+        background.setPost(postRepository.findById(created.getPostId()).orElseThrow());
         mediaRepository.save(background);
 
         return userMapper.toUserResponseDTO(user);
