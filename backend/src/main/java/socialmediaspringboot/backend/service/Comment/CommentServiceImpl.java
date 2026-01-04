@@ -54,6 +54,7 @@ public class CommentServiceImpl implements CommentService{
         );
 
         Comment cmt = new Comment();
+        cmt.setAuthor(user);
         cmt.setContent(requestDTO.getContent());
         cmt.setCreatedAt(LocalDateTime.now());
         commentRepository.save(cmt);
