@@ -15,7 +15,7 @@ public interface UserMapper {
     @Mapping(target = "userId", ignore = true)
     User toUser(UserDTO request);
 
-    @Mapping(target="roles", ignore = true)
+    @Mapping(source="roles", target = "roles")
     UserResponseDTO toUserResponseDTO (User user);
     @Mapping(target="roles", ignore = true)
     @Mapping(target = "userId", ignore = true)
