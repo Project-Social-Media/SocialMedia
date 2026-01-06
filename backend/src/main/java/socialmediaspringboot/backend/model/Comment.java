@@ -25,7 +25,7 @@ public class Comment {
     @Column(name = "commentId", nullable = false)
     private Long commentId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "authorId", nullable = false)
     @JsonBackReference("user-comment") // child reference
     private User author;

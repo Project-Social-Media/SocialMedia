@@ -8,7 +8,7 @@ import socialmediaspringboot.backend.dto.Comment.CommentUpdateDTO;
 import java.util.List;
 
 public interface CommentService {
-    public CommentResponseDTO createComment(Long userId, CommentRequestDTO requestDTO, MultipartFile[] files);
+    public CommentResponseDTO createComment(Long userId, Long postId, CommentRequestDTO requestDTO, MultipartFile[] files);
     public CommentResponseDTO getCommentById(Long cmtId);
     public List<CommentResponseDTO> getAllCommentsByPost(Long postId);
     public List<CommentResponseDTO> getAllCommentsByUser(Long userId);

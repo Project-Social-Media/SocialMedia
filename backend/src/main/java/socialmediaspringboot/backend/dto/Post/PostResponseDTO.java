@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import socialmediaspringboot.backend.model.Comment;
 import socialmediaspringboot.backend.model.Media;
 import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.Privacy;
@@ -29,5 +30,5 @@ public class PostResponseDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<Media> mediaList = new ArrayList<>();
-
+    private List<Comment> commentList = new ArrayList<>();
 }

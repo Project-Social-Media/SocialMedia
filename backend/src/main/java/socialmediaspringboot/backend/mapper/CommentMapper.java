@@ -19,10 +19,9 @@ public interface CommentMapper {
     @Mapping(target = "post", ignore = true)
     Comment toComment(CommentRequestDTO request);
 
-    @Mapping(target = "commentId", ignore = false)
     @Mapping(source = "author.userId", target = "userId")
     @Mapping(source = "post.postId", target = "postId")
-    CommentResponseDTO toCommentResponseDTO (Comment media);
+    CommentResponseDTO toCommentResponseDTO (Comment comment);
 
     // UPDATE
     @Mapping(target = "post", ignore = true)

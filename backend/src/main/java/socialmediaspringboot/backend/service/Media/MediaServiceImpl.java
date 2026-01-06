@@ -82,12 +82,12 @@ public class MediaServiceImpl implements MediaService {
             }
             media.setUploadorder(request.getUploadorder());
             //logic to check logged-in user - this user is the author of the media
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String email = authentication.getName();
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-            Long userId = user.getUserId();
-            media.setUserId(user);
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            String email = authentication.getName();
+//            User user = userRepository.findByEmail(email)
+//                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+//            Long userId = user.getUserId();
+//            media.setUserId(user);
             media.setCloudId((String) data.get("public_id"));
             media.setCreatedAt(LocalDateTime.now());
             return mediaMapper.toMediaResponseDTO(media);

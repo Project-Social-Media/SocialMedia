@@ -17,11 +17,9 @@ import socialmediaspringboot.backend.mapper.MediaMapper;
 import socialmediaspringboot.backend.model.Comment;
 import socialmediaspringboot.backend.model.Media;
 import socialmediaspringboot.backend.model.MediaType;
+import socialmediaspringboot.backend.model.Post;
 import socialmediaspringboot.backend.model.User.User;
-import socialmediaspringboot.backend.repository.CommentRepository;
-import socialmediaspringboot.backend.repository.MediaRepository;
-import socialmediaspringboot.backend.repository.MediaTypeRepository;
-import socialmediaspringboot.backend.repository.UserRepository;
+import socialmediaspringboot.backend.repository.*;
 import socialmediaspringboot.backend.service.Media.MediaService;
 import socialmediaspringboot.backend.service.Media.MediaServiceImpl;
 
@@ -46,15 +44,22 @@ public class CommentServiceImpl implements CommentService{
     private final MediaTypeRepository mediaTypeRepository;
 
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
+    @Transactional
     @Override
-    public CommentResponseDTO createComment(Long userId, CommentRequestDTO requestDTO, MultipartFile[] files) {
+    public CommentResponseDTO createComment(Long userId, Long postId, CommentRequestDTO requestDTO, MultipartFile[] files) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
 
-        Comment cmt = new Comment();
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new AppException(ErrorCode.POST_NOT_FOUND)
+        );
+
+        Comment cmt = commentMapper.toComment(requestDTO);
         cmt.setAuthor(user);
+        cmt.setPost(post);
         cmt.setContent(requestDTO.getContent());
         cmt.setCreatedAt(LocalDateTime.now());
         commentRepository.save(cmt);

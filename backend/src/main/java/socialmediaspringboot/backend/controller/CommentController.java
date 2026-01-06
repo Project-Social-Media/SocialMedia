@@ -22,11 +22,12 @@ public class CommentController {
     @Autowired
     private CommentServiceImpl commentService;
 
-    @PostMapping(value="user/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value="user/{userId}/post/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<CommentResponseDTO> createComment(@PathVariable Long userId,
+                                                         @PathVariable Long postId,
                                                          @RequestPart("comment") @Valid CommentRequestDTO requestDTO,
                                                          @RequestPart(value = "file", required = false)MultipartFile[] files){
-        CommentResponseDTO createdComment = commentService.createComment(userId, requestDTO, files);
+        CommentResponseDTO createdComment = commentService.createComment(userId, postId, requestDTO, files);
         return ApiResponse.<CommentResponseDTO>builder()
                 .result(createdComment)
                 .message("Create Comment Successfully")

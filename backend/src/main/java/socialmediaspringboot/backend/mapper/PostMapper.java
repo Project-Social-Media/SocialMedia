@@ -23,6 +23,7 @@ public interface PostMapper {
     @Mapping(target = "authorEmail", source = "author.email")
     @Mapping(target = "originalPostId", source = "originalPost.postId")
     @Mapping(target = "privacy", source = "privacy")
+    @Mapping(source = "commentList", target = "commentList")
     PostResponseDTO toPostResponseDTO(Post post);
 
     // UPDATE

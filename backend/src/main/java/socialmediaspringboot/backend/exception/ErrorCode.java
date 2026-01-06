@@ -29,6 +29,8 @@ public enum ErrorCode {
             HttpStatus.NOT_FOUND),
     MEDIA_TYPE_NOT_FOUND(109, "Media type unsupported.",
             HttpStatus.NOT_FOUND),
+    POST_NOT_FOUND(110, "Post not found.",
+            HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode){
